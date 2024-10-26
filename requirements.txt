@@ -1,0 +1,10 @@
+Install Packages:
+pip install Flask Flask-SQLAlchemy Flask-WTF Flask-Migrate plotly
+
+
+Setup virtual environment:
+1. open cmd and then:
+cd path\to\file
+2.python -m venv venv
+3. activate:
+venv\Scripts\activate

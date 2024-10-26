@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scan Products</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 20px;
+            margin: 0 auto;
+            background-color: #f7f7f7;
+        }
+        .container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        #reader {
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+            display: none;
+            padding: 20px 0;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            background: #fff;
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+        }
+        .quantity-controls button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+        .quantity-controls button:hover {
+            background-color: #0056b3;
+        }
+        .quantity-controls span {
+            margin: 0 10px;
+            font-weight: bold;
+        }
+        .button {
+            padding: 10px 20px;
+            margin: 10px;
+            color: white;
+            background-color: #007bff;
+            text-decoration: none;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .button:hover {
+            background-color: #0056b3;
+        }
+        .error {
+            color: red;
+            margin-top: 10px;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.0.3/html5-qrcode.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Scan Products for {{ name }}</h1>
+        <p>Phone: {{ phone }}</p>
+        <div id="reader"></div>
+        <ul id="scanned-products"></ul>
+        <button class="button" onclick="startScanner()">Add Product</button>
+        <button class="button" onclick="location.href='/'">Back to Home</button>
+        <form method="POST" action="{{ url_for('generate_bill') }}">
+            <input type="hidden" name="name" value="{{ name }}">
+            <input type="hidden" name="phone" value="{{ phone }}">
+            <input type="hidden" name="products" id="products-input" value="">
+            <button type="submit" class="button">Generate Bill</button>
+        </form>
+        <p id="error-message" class="error"></p>
+    </div>
+    <script>
+        let html5QrCode;
+        const scannedProducts = [];
+
+        function onScanSuccess(decodedText) {
+            const regex = /^Product: (.+), Price: (\d+\.\d+)$/;
+            const matches = decodedText.match(regex);
+
+            if (matches && matches.length === 3) {
+                const name = matches[1].trim();
+                const price = parseFloat(matches[2]);
+
+                const existingProduct = scannedProducts.find(product => product.name === name && product.price === price);
+
+                if (existingProduct) {
+                    existingProduct.quantity++;
+                } else {
+                    scannedProducts.push({ name, price, quantity: 1 });
+                }
+
+                updateProductList();
+                document.getElementById('products-input').value = JSON.stringify(scannedProducts);
+                document.getElementById('error-message').textContent = '';
+
+                html5QrCode.stop().then(ignore => {
+                    document.getElementById('reader').style.display = 'none';
+                }).catch(err => {
+                    console.log('Unable to stop scanning, error:', err);
+                });
+            } else {
+                document.getElementById('error-message').textContent = 'Invalid QR code format. Please try again.';
+            }
+        }
+
+        function onScanFailure(error) {
+            document.getElementById('error-message').textContent = 'QR scanning failed. Please try again.';
+        }
+
+        function startScanner() {
+            document.getElementById('reader').style.display = 'block';
+            if (!html5QrCode) {
+                html5QrCode = new Html5Qrcode("reader");
+            }
+            html5QrCode.start(
+                { facingMode: "environment" },
+                { fps: 10, qrbox: 250 },
+                onScanSuccess,
+                onScanFailure
+            ).catch(err => console.log(`Unable to start scanning, error: ${err}`));
+        }
+
+        function updateProductList() {
+            const productList = document.getElementById('scanned-products');
+            productList.innerHTML = '';
+            scannedProducts.forEach((product, index) => {
+                const productItem = document.createElement('li');
+                productItem.innerHTML = `
+                    ${product.name} - $${product.price.toFixed(2)}
+                    <div class="quantity-controls">
+                        <button onclick="decreaseQuantity(${index})">-</button>
+                        <span>${product.quantity}</span>
+                        <button onclick="increaseQuantity(${index})">+</button>
+                    </div>
+                `;
+                productList.appendChild(productItem);
+            });
+        }
+
+        function increaseQuantity(index) {
+            scannedProducts[index].quantity++;
+            updateProductList();
+            document.getElementById('products-input').value = JSON.stringify(scannedProducts);
+        }
+
+        function decreaseQuantity(index) {
+            if (scannedProducts[index].quantity > 1) {
+                scannedProducts[index].quantity--;
+            } else {
+                scannedProducts.splice(index, 1);
+            }
+            updateProductList();
+            document.getElementById('products-input').value = JSON.stringify(scannedProducts);
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            console.log('Page loaded. Ready for scanner initialization on button press.');
+        });
+    </script>
+</body>
+</html>

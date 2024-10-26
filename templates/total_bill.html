@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bill</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            margin: 0 auto;
+            max-width: 600px;
+            background-color: #f4f4f4;
+        }
+        h1, h2, h3 {
+            color: #333;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            background: #fff;
+            margin: 5px 0;
+            padding: 10px;
+            border: 1px solid #ddd;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .details {
+            margin-bottom: 20px;
+        }
+        .totals {
+            margin-top: 20px;
+        }
+        .buttons {
+            margin-top: 20px;
+        }
+        .button {
+            padding: 10px 20px;
+            margin: 5px;
+            color: white;
+            background-color: #007bff;
+            text-decoration: none;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+        }
+        .button:hover {
+            background-color: #0056b3;
+        }
+        .thanks {
+            font-weight: bold;
+            font-size: 1.2em;
+            margin-top: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Your Organization Name</h1>
+        <p>Plot No. 8-11, Tech Zone 2, Greater Noida, GB Nagar, Uttar Pradesh, 201310</p>
+        <p>Contact: 7428216984</p>
+    </div>
+    <div class="details">
+        <p>Date: {{ date }}</p>
+        <p>Time: {{ time }}</p>
+        <p>Bill No.: {{ bill_no }}</p>
+        <p>Cashier: {{ cashier }}</p>
+    </div>
+    <h2>Products:</h2>
+    <ul>
+        {% for product in products %}
+        <li>{{ product.name }} - ${{ "{:.2f}".format(product.price) }} (Quantity: {{ product.quantity }})</li>
+        {% endfor %}
+    </ul>
+    <div class="totals">
+        <h3>Subtotal: ${{ "{:.2f}".format(subtotal) }}</h3>
+        <p>CGST (2.5%): ${{ "{:.2f}".format(cgst) }}</p>
+        <p>SGST (2.5%): ${{ "{:.2f}".format(sgst) }}</p>
+        <h3>Grand Total: ${{ "{:.2f}".format(grand_total) }}</h3>
+        <p>Payment Method: {{ payment_method }}</p>
+    </div>
+    <div class="thanks">Thanks for ordering.</div>
+    <div class="buttons">
+        <button class="button" onclick="window.print()">Print</button>
+        <a href="{{ url_for('home') }}" class="button">Return to Home</a>
+    </div>
+</body>
+</html>
