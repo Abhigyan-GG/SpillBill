@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="icon" type="image/png" href="C:\Users\Hemant\Downloads\PYTHON\SpillBill\static\favicon.png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SpillBILL Home</title>
@@ -11,6 +12,19 @@
             padding: 50px;
             background-color: #f8f9fa;
             color: #333;
+        }
+        .header {
+            display: flex;
+            flex-direction: column; /* Change to column to stack logo and title */
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            background-color: #f4f4f4;
+            margin-bottom: 20px;
+        }
+        .logo {
+            max-height: 50px;
+            margin-bottom: 10px; /* Add margin below logo */
         }
         h1 {
             font-size: 3rem;
@@ -37,7 +51,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <h1>Welcome to SpillBILL</h1>
+    <div class="header">
+        <img src="C:\Users\Hemant\Downloads\PYTHON\SpillBill\static\favicon.png" alt="Logo" class="logo">
+        <h1>Welcome to SpillBILL</h1>
+    </div>
     <p>Select an action below:</p>
     <div class="button-container">
         <a href="{{ url_for('inventory') }}" class="button">Inventory</a>
