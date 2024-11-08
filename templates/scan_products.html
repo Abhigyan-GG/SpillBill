@@ -225,34 +225,39 @@
         }
 
         function onScanSuccess(decodedText) {
-            const regex = /^Product: (.+), Price: (\d+\.\d+)$/;
-            const matches = decodedText.match(regex);
+    const regex = /^Product: (.+), Price: (\d+\.\d+)$/;
+    const matches = decodedText.match(regex);
 
-            if (matches && matches.length === 3) {
-                const name = matches[1].trim();
-                const price = parseFloat(matches[2]);
+    if (matches && matches.length === 3) {
+        const name = matches[1].trim();
+        const price = parseFloat(matches[2]);
 
-                const existingProduct = scannedProducts.find(product => product.name === name && product.price === price);
+        // Check if the product already exists in the scannedProducts list
+        const existingProduct = scannedProducts.find(product => product.name === name && product.price === price);
 
-                if (existingProduct) {
-                    existingProduct.quantity++;
-                } else {
-                    scannedProducts.push({ name, price, quantity: 1 });
-                }
-
-                updateProductList();
-                document.getElementById('products-input').value = JSON.stringify(scannedProducts);
-                document.getElementById('error-message').textContent = '';
-
-                html5QrCode.stop().then(ignore => {
-                    document.getElementById('reader').style.display = 'none'; // Hide scanner after success
-                }).catch(err => {
-                    console.log('Unable to stop scanning, error:', err);
-                });
-            } else {
-                document.getElementById('error-message').textContent = 'Invalid QR code format. Please try again.';
-            }
+        if (existingProduct) {
+            existingProduct.quantity++;
+        } else {
+            // If the product doesn't exist, add it to the list
+            scannedProducts.push({ name, price, quantity: 1 });
         }
+
+        // Update the product list in the UI
+        updateProductList();
+        document.getElementById('products-input').value = JSON.stringify(scannedProducts);
+        document.getElementById('error-message').textContent = '';
+
+        // Stop scanning and hide the reader
+        html5QrCode.stop().then(ignore => {
+            document.getElementById('reader').style.display = 'none';
+        }).catch(err => {
+            console.log('Unable to stop scanning, error:', err);
+        });
+    } else {
+        document.getElementById('error-message').textContent = 'Invalid QR code format. Please try again.';
+    }
+}
+
 
         function onScanFailure(error) {
             document.getElementById('error-message').textContent = 'QR scanning failed. Please try again.';
@@ -325,3 +330,4 @@
     </script>
 </body>
 </html>
+
