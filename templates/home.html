@@ -6,59 +6,91 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SpillBILL Home</title>
     <style>
+        /* Basic Reset */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
         body {
             font-family: 'Roboto', sans-serif;
             text-align: center;
-            padding: 50px;
-            background-color: #f8f9fa;
+            padding: 50px 20px;
+            background: linear-gradient(135deg, #e9f7ff, #f8f9fa);
             color: #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .container {
+            max-width: 600px;
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
         }
         .header {
             display: flex;
-            flex-direction: column; /* Change to column to stack logo and title */
+            flex-direction: column;
             align-items: center;
-            justify-content: center;
-            padding: 10px;
-            background-color: #f4f4f4;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f1f1f1;
             margin-bottom: 20px;
         }
         .logo {
-            max-height: 50px;
-            margin-bottom: 10px; /* Add margin below logo */
+            max-height: 60px;
+            margin-bottom: 15px;
         }
         h1 {
-            font-size: 3rem;
+            font-size: 2.5rem;
             color: #007bff;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        p {
+            font-size: 1.1rem;
+            color: #555;
         }
         .button-container {
             margin-top: 30px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
         }
         .button {
             display: inline-block;
-            padding: 15px 30px;
+            padding: 15px 25px;
             font-size: 1.2rem;
-            margin: 10px;
+            font-weight: 600;
             color: white;
             background-color: #007bff;
             text-decoration: none;
-            border-radius: 5px;
-            transition: background-color 0.3s;
+            border-radius: 8px;
+            transition: background-color 0.3s, transform 0.2s;
+            box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
         }
         .button:hover {
             background-color: #0056b3;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 123, 255, 0.4);
         }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="header">
-        <img src="{{ url_for('static', filename='favicon.png') }}" alt="Logo" class="logo">
-        <h1>Welcome to SpillBILL</h1>
-    </div>
-    <p>Select an action below:</p>
-    <div class="button-container">
-        <a href="{{ url_for('inventory') }}" class="button">Inventory</a>
-        <a href="{{ url_for('customer_details') }}" class="button">Generate Your Bill</a>
+    <div class="container">
+        <div class="header">
+            <img src="{{ url_for('static', filename='favicon.png') }}" alt="Logo" class="logo">
+            <h1>Welcome to SpillBILL</h1>
+        </div>
+        <p>Select an action below:</p>
+        <div class="button-container">
+            <a href="{{ url_for('inventory') }}" class="button">Inventory</a>
+            <a href="{{ url_for('customer_details') }}" class="button">Generate Your Bill</a>
+        </div>
     </div>
 </body>
 </html>

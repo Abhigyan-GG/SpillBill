@@ -5,90 +5,148 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bill</title>
+    <!-- Font Awesome CDN for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
             padding: 20px;
-            margin: 0 auto;
-            max-width: 600px;
-            background-color: #f4f4f4;
-        }
-        h1, h2, h3 {
+            background: linear-gradient(135deg, #f0f4f7, #c9d6e3);
             color: #333;
         }
-        ul {
-            list-style-type: none;
-            padding: 0;
-        }
-        li {
-            background: #fff;
-            margin: 5px 0;
-            padding: 10px;
-            border: 1px solid #ddd;
+        .container {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            max-width: 800px;
+            margin: 0 auto;
+            overflow: hidden;
         }
         .header {
             text-align: center;
             margin-bottom: 20px;
         }
+        .header h1 {
+            font-size: 28px;
+            color: #007bff;
+        }
+        .header p {
+            color: #555;
+            font-size: 16px;
+            margin: 5px 0;
+        }
         .details {
-            margin-bottom: 20px;
+            margin-bottom: 30px;
+            font-size: 16px;
+            color: #555;
+        }
+        .details p {
+            margin: 5px 0;
+        }
+        h2 {
+            font-size: 24px;
+            color: #007bff;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+            font-size: 16px;
+        }
+        li {
+            background: #fafafa;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            display: flex;
+            justify-content: space-between;
+        }
+        li span {
+            font-weight: bold;
         }
         .totals {
-            margin-top: 20px;
+            margin-top: 30px;
+            font-size: 18px;
+        }
+        .totals h3 {
+            color: #333;
+            font-size: 22px;
+            margin-bottom: 10px;
+        }
+        .totals p {
+            font-size: 16px;
+            color: #555;
+            margin: 5px 0;
         }
         .buttons {
-            margin-top: 20px;
+            margin-top: 30px;
+            text-align: center;
         }
         .button {
-            padding: 10px 20px;
-            margin: 5px;
-            color: white;
+            padding: 12px 30px;
+            margin: 10px;
             background-color: #007bff;
-            text-decoration: none;
-            border-radius: 5px;
+            color: white;
+            font-size: 16px;
             border: none;
+            border-radius: 30px;
+            text-decoration: none;
             cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
         }
         .button:hover {
             background-color: #0056b3;
+            transform: scale(1.05);
         }
         .thanks {
             font-weight: bold;
-            font-size: 1.2em;
+            font-size: 1.3em;
             margin-top: 20px;
             text-align: center;
+            color: #28a745;
         }
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1>Your Organization Name</h1>
-        <p>Plot No. 8-11, Tech Zone 2, Greater Noida, GB Nagar, Uttar Pradesh, 201310</p>
-        <p>Contact: 7428216984</p>
-    </div>
-    <div class="details">
-        <p>Date: {{ date }}</p>
-        <p>Time: {{ time }}</p>
-        <p>Bill No.: {{ bill_no }}</p>
-        <p>Cashier: {{ cashier }}</p>
-    </div>
-    <h2>Products:</h2>
-    <ul>
-        {% for product in products %}
-        <li>{{ product.name }} - ${{ "{:.2f}".format(product.price) }} (Quantity: {{ product.quantity }})</li>
-        {% endfor %}
-    </ul>
-    <div class="totals">
-        <h3>Subtotal: ${{ "{:.2f}".format(subtotal) }}</h3>
-        <p>CGST (2.5%): ${{ "{:.2f}".format(cgst) }}</p>
-        <p>SGST (2.5%): ${{ "{:.2f}".format(sgst) }}</p>
-        <h3>Grand Total: ${{ "{:.2f}".format(grand_total) }}</h3>
-        <p>Payment Method: {{ payment_method }}</p>
-    </div>
-    <div class="thanks">Thanks for ordering.</div>
-    <div class="buttons">
-        <button class="button" onclick="window.print()">Print</button>
-        <a href="{{ url_for('home') }}" class="button">Return to Home</a>
+    <div class="container">
+        <div class="header">
+            <h1>Your Organization Name</h1>
+            <p>Plot No. 8-11, Tech Zone 2, Greater Noida, GB Nagar, Uttar Pradesh, 201310</p>
+            <p>Contact: 7428216984</p>
+        </div>
+        <div class="details">
+            <p>Date: {{ date }}</p>
+            <p>Time: {{ time }}</p>
+            <p>Bill No.: {{ bill_no }}</p>
+            <p>Cashier: {{ cashier }}</p>
+        </div>
+        <h2>Products:</h2>
+        <ul>
+            {% for product in products %}
+            <li>
+                <span>{{ product.name }}</span> - ₹{{ "{:.2f}".format(product.price) }} 
+                (Quantity: {{ product.quantity }})
+            </li>
+            {% endfor %}
+        </ul>
+        <div class="totals">
+            <h3>Subtotal: ₹{{ "{:.2f}".format(subtotal) }}</h3>
+            <p>CGST (2.5%): ₹{{ "{:.2f}".format(cgst) }}</p>
+            <p>SGST (2.5%): ₹{{ "{:.2f}".format(sgst) }}</p>
+            <h3>Grand Total: ₹{{ "{:.2f}".format(grand_total) }}</h3>
+            <p>Payment Method: {{ payment_method }}</p>
+        </div>
+        <div class="thanks">Thanks for ordering!</div>
+        <div class="buttons">
+            <button class="button" onclick="window.print()">
+                <i class="fas fa-print"></i> Print
+            </button>
+            <a href="{{ url_for('home') }}" class="button">Return to Home</a>
+        </div>
     </div>
 </body>
 </html>

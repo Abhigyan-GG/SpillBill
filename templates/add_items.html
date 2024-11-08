@@ -6,6 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add New Product</title>
     <style>
+        /* Reset and basic styling */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
@@ -13,60 +19,73 @@
             justify-content: center;
             min-height: 100vh;
             margin: 0;
-            background-color: #f4f6f8;
+            background: linear-gradient(135deg, #e8f0fe, #d0e4fe);
         }
         .container {
             background-color: #ffffff;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-            max-width: 400px;
+            padding: 40px 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            max-width: 420px;
             width: 100%;
             text-align: center;
         }
         h1 {
-            color: #333;
-            margin-bottom: 20px;
+            color: #007bff;
+            font-size: 1.8em;
+            margin-bottom: 25px;
+            font-weight: 600;
         }
         form {
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 20px;
         }
         label {
-            font-size: 0.9em;
+            font-size: 1em;
             color: #555;
+            font-weight: 500;
             text-align: left;
         }
         input[type="text"],
         input[type="number"] {
-            padding: 10px;
-            border-radius: 5px;
+            padding: 12px;
+            border-radius: 8px;
             border: 1px solid #ccc;
             font-size: 1em;
             width: 100%;
-            box-sizing: border-box;
+            transition: border-color 0.3s;
+        }
+        input[type="text"]:focus,
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 8px rgba(0, 123, 255, 0.3);
         }
         button {
-            padding: 10px;
-            color: #ffffff;
+            padding: 12px;
             font-size: 1em;
+            font-weight: 600;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
             cursor: pointer;
-            margin-top: 10px;
+            transition: background-color 0.3s, transform 0.2s;
         }
         .submit-button {
             background-color: #007bff;
+            color: #ffffff;
         }
         .submit-button:hover {
             background-color: #0056b3;
+            transform: translateY(-2px);
         }
         .back-button {
             background-color: #6c757d;
+            color: #ffffff;
         }
         .back-button:hover {
             background-color: #5a6268;
+            transform: translateY(-2px);
         }
     </style>
 </head>
@@ -75,10 +94,10 @@
         <h1>Add New Product</h1>
         <form method="POST">
             <label for="name">Product Name:</label>
-            <input type="text" name="name" placeholder="Enter product name" required>
+            <input type="text" name="name" id="name" placeholder="Enter product name" required>
 
             <label for="price">Price:</label>
-            <input type="number" step="0.01" name="price" placeholder="Enter product price" required>
+            <input type="number" step="0.01" name="price" id="price" placeholder="Enter product price" required>
 
             <button type="submit" class="submit-button">Add Product</button>
         </form>

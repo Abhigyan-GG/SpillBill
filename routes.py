@@ -1,4 +1,4 @@
-from flask import render_template, request, redirect, url_for
+from flask import render_template, request, redirect, url_for, jsonify
 from app import app, db
 from models import Product
 import qrcode
@@ -50,14 +50,39 @@ def customer_details():
     return render_template('customer_details.html')
 
 
-# Route to scan products
-@app.route('/scan_products')
+# Route to scan products and add by name
+@app.route('/scan_products', methods=['GET', 'POST'])
 def scan_products():
     customer_name = request.args.get('name')
     phone_number = request.args.get('phone')
+
+    if request.method == 'POST':
+        product_name = request.form['product_name']
+        if product_name:
+            product = Product.query.filter_by(name=product_name).first()
+            if product:
+                scanned_products = json.loads(request.form['scanned_products'])
+                existing_product = next((p for p in scanned_products if p['name'] == product.name), None)
+                if existing_product:
+                    existing_product['quantity'] += 1
+                else:
+                    scanned_products.append({'name': product.name, 'price': product.price, 'quantity': 1})
+                return render_template('scan_products.html', name=customer_name, phone=phone_number,
+                                       scanned_products=scanned_products)
+            else:
+                return render_template('scan_products.html', name=customer_name, phone=phone_number,
+                                       error="Product not found in inventory")
     return render_template('scan_products.html', name=customer_name, phone=phone_number)
 
 
+# API to fetch product list for adding by name
+@app.route('/api/products')
+def get_products():
+    products = Product.query.all()
+    return jsonify([{'name': product.name, 'price': product.price} for product in products])
+
+
+# Route to generate the bill
 @app.route('/generate_bill', methods=['POST'])
 def generate_bill():
     from datetime import datetime
@@ -89,11 +114,11 @@ def generate_bill():
         f.write(f'Bill No.: {bill_no}\n')
         f.write(f'Cashier: {cashier}\n')
         for product in scanned_products:
-            f.write(f'{product["name"]} - ${product["price"]} (Quantity: {product["quantity"]})\n')
-        f.write(f'Subtotal: ${subtotal}\n')
-        f.write(f'CGST (2.5%): ${cgst}\n')
-        f.write(f'SGST (2.5%): ${sgst}\n')
-        f.write(f'Grand Total: ${grand_total}\n')
+            f.write(f'{product["name"]} - ₹{product["price"]} (Quantity: {product["quantity"]})\n')
+        f.write(f'Subtotal: ₹{subtotal}\n')
+        f.write(f'CGST (2.5%): ₹{cgst}\n')
+        f.write(f'SGST (2.5%): ₹{sgst}\n')
+        f.write(f'Grand Total: ₹{grand_total}\n')
         f.write(f'Payment Method: {payment_method}\n')
 
     # Pass the details to the template

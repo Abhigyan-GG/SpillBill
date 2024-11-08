@@ -13,26 +13,30 @@
             align-items: center;
             min-height: 100vh;
             margin: 0;
-            background-color: #f3f3f3;
+            background-color: #e9ecef;
         }
         .container {
             width: 100%;
             max-width: 400px;
-            padding: 20px;
-            background: #fff;
+            padding: 30px;
+            background: #ffffff;
             border-radius: 8px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             text-align: center;
+            transition: box-shadow 0.3s;
+        }
+        .container:hover {
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
         }
         h1 {
-            font-size: 24px;
+            font-size: 26px;
             color: #d9534f;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
         }
         p {
             font-size: 16px;
-            color: #333;
-            margin-bottom: 20px;
+            color: #555;
+            margin-bottom: 24px;
         }
         button {
             padding: 10px 20px;
@@ -42,6 +46,7 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            transition: background-color 0.3s;
             width: 100px;
         }
         .delete-button {

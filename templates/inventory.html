@@ -6,55 +6,100 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inventory</title>
     <style>
+        /* Basic Reset */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            text-align: center;
-            padding: 50px;
             background-color: #f7f7f7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            width: 100%;
+            max-width: 900px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            text-align: center;
+        }
+        h1 {
+            font-size: 2.2rem;
+            color: #333;
+            margin-bottom: 20px;
         }
         table {
-            width: 80%;
-            margin: 20px auto;
+            width: 100%;
+            margin: 20px 0;
             border-collapse: collapse;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            border-radius: 10px;
+            overflow: hidden;
         }
         table th, table td {
-            border: 1px solid #ddd;
-            padding: 12px;
+            padding: 15px;
             text-align: center;
         }
         table th {
             background-color: #007bff;
-            color: white;
+            color: #ffffff;
+            font-weight: 600;
         }
-        table tr:nth-child(even) {
-            background-color: #f2f2f2;
+        table td {
+            background-color: #f9f9f9;
+            color: #555;
+        }
+        table tr:nth-child(even) td {
+            background-color: #f1f1f1;
         }
         .button {
             padding: 10px 20px;
-            margin: 10px;
             color: white;
             background-color: #007bff;
-            text-decoration: none;
-            border-radius: 5px;
             border: none;
+            border-radius: 5px;
+            text-decoration: none;
             cursor: pointer;
-            display: inline-block;
+            font-weight: bold;
+            transition: background-color 0.3s, transform 0.2s;
+            box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
         }
         .button:hover {
             background-color: #0056b3;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 123, 255, 0.4);
         }
-        .container {
-            width: 100%;
-            margin: 0 auto;
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
         }
-        h1 {
-            color: #333;
-            margin-bottom: 20px;
+        .actions-button {
+            padding: 8px 16px;
+            background-color: #dc3545;
+        }
+        .actions-button:hover {
+            background-color: #c82333;
         }
         @media (max-width: 768px) {
             table {
-                width: 100%;
+                font-size: 0.9rem;
+            }
+            h1 {
+                font-size: 1.8rem;
+            }
+            .button, .actions-button {
+                padding: 8px 16px;
+                font-size: 0.9rem;
             }
         }
     </style>
@@ -76,16 +121,18 @@
                 <tr>
                     <td>{{ product.id }}</td>
                     <td>{{ product.name }}</td>
-                    <td>${{ product.price }}</td>
+                    <td>₹{{ product.price }}</td> <!-- Currency updated to rupee symbol -->
                     <td>
-                        <a href="{{ url_for('delete_product', id=product.id) }}" class="button">Delete</a>
+                        <a href="{{ url_for('delete_product', id=product.id) }}" class="button actions-button">Delete</a>
                     </td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
-        <button onclick="location.href='/add_items'" class="button">Add Item</button>
-        <button onclick="location.href='/'" class="button">Back to Home</button>
+        <div class="button-container">
+            <button onclick="location.href='/add_items'" class="button">Add Item</button>
+            <button onclick="location.href='/'" class="button">Back to Home</button>
+        </div>
     </div>
 </body>
 </html>
