@@ -108,7 +108,8 @@ def generate_bill():
     grand_total = subtotal + cgst + sgst
 
     # Save bill to file
-    with open(filename, 'w') as f:
+    # Save bill to file
+    with open(filename, 'w', encoding='utf-8') as f:
         f.write(f'Customer: {customer_name}, Phone: {phone_number}\n')
         f.write(f'Date: {now.strftime("%d/%m/%Y")}, Time: {now.strftime("%H:%M:%S")}\n')
         f.write(f'Bill No.: {bill_no}\n')
