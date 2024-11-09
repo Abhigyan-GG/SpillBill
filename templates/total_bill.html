@@ -8,80 +8,98 @@
     <!-- Font Awesome CDN for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
+        /* Background with subtle texture */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 20px;
-            background: linear-gradient(135deg, #f0f4f7, #c9d6e3);
+            background: linear-gradient(135deg, #e0eafc, #cfdef3);
+            background-attachment: fixed;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
             color: #333;
         }
+
+        /* Container styling */
         .container {
-            background-color: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            padding: 30px;
-            max-width: 800px;
-            margin: 0 auto;
-            overflow: hidden;
+            background: rgba(255, 255, 255, 0.9); /* Slight transparency */
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            max-width: 750px;
+            margin: auto;
+            animation: fadeIn 0.5s ease-in-out;
         }
+
+        /* Header styling */
         .header {
             text-align: center;
             margin-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 20px;
         }
         .header h1 {
-            font-size: 28px;
+            font-size: 30px;
             color: #007bff;
+            margin: 0;
         }
         .header p {
             color: #555;
             font-size: 16px;
             margin: 5px 0;
         }
-        .details {
-            margin-bottom: 30px;
+
+        /* Product and total sections */
+        .details, .totals {
             font-size: 16px;
             color: #555;
+            margin-bottom: 30px;
         }
-        .details p {
+        .details p, .totals p {
             margin: 5px 0;
         }
         h2 {
             font-size: 24px;
             color: #007bff;
-            margin-top: 20px;
             margin-bottom: 10px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
         }
+
+        /* Product list */
         ul {
             list-style-type: none;
             padding: 0;
             font-size: 16px;
         }
         li {
-            background: #fafafa;
-            padding: 10px;
+            background: #f9f9f9;
+            padding: 10px 15px;
             margin-bottom: 10px;
             border: 1px solid #ddd;
             border-radius: 6px;
             display: flex;
             justify-content: space-between;
+            align-items: center;
         }
         li span {
             font-weight: bold;
-        }
-        .totals {
-            margin-top: 30px;
-            font-size: 18px;
-        }
-        .totals h3 {
             color: #333;
+        }
+
+        /* Totals */
+        .totals h3 {
             font-size: 22px;
             margin-bottom: 10px;
         }
         .totals p {
             font-size: 16px;
-            color: #555;
             margin: 5px 0;
         }
+
+        /* Buttons */
         .buttons {
             margin-top: 30px;
             text-align: center;
@@ -97,6 +115,7 @@
             text-decoration: none;
             cursor: pointer;
             transition: background-color 0.3s, transform 0.2s;
+            box-shadow: 0 4px 10px rgba(0, 123, 255, 0.2);
         }
         .button:hover {
             background-color: #0056b3;
@@ -105,9 +124,24 @@
         .thanks {
             font-weight: bold;
             font-size: 1.3em;
-            margin-top: 20px;
+            margin-top: 30px;
             text-align: center;
             color: #28a745;
+            border-top: 1px solid #ddd;
+            padding-top: 15px;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        /* Keyframes for fade-in animation */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
     </style>
 </head>
