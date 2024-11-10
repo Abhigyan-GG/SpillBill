@@ -6,6 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Delete Product</title>
     <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
         body {
             font-family: Arial, sans-serif;
             display: flex;
@@ -13,53 +18,78 @@
             align-items: center;
             min-height: 100vh;
             margin: 0;
-            background-color: #e9ecef;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
         }
         .container {
             width: 100%;
-            max-width: 400px;
+            max-width: 380px;
             padding: 30px;
             background: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
             text-align: center;
-            transition: box-shadow 0.3s;
+            transition: box-shadow 0.3s, transform 0.3s;
+            overflow: hidden;
         }
         .container:hover {
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+            transform: translateY(-4px);
         }
         h1 {
-            font-size: 26px;
+            font-size: 28px;
             color: #d9534f;
-            margin-bottom: 16px;
+            margin-bottom: 18px;
         }
         p {
-            font-size: 16px;
-            color: #555;
+            font-size: 17px;
+            color: #6c757d;
             margin-bottom: 24px;
+            line-height: 1.6;
         }
         button {
-            padding: 10px 20px;
+            padding: 12px 20px;
             margin: 10px;
             font-size: 16px;
-            color: white;
+            font-weight: 600;
+            color: #ffffff;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            transition: background-color 0.3s;
-            width: 100px;
+            transition: all 0.3s ease;
+            width: 120px;
+            outline: none;
         }
         .delete-button {
             background-color: #d9534f;
+            box-shadow: 0 4px 12px rgba(217, 83, 79, 0.3);
         }
         .delete-button:hover {
             background-color: #c9302c;
+            box-shadow: 0 6px 16px rgba(201, 48, 44, 0.35);
         }
         .cancel-button {
             background-color: #5bc0de;
+            box-shadow: 0 4px 12px rgba(91, 192, 222, 0.3);
         }
         .cancel-button:hover {
             background-color: #31b0d5;
+            box-shadow: 0 6px 16px rgba(49, 176, 213, 0.35);
+        }
+        .container::after {
+            content: "";
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 100px;
+            height: 100px;
+            background: #f1f1f1;
+            border-radius: 50%;
+            z-index: -1;
+            opacity: 0.2;
+            transition: transform 0.4s ease;
+        }
+        .container:hover::after {
+            transform: rotate(15deg) translate(20px, 20px);
         }
     </style>
 </head>
