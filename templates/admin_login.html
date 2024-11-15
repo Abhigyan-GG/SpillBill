@@ -4,7 +4,7 @@
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Customer Details</title>
+    <title>Admin Login</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -40,7 +40,7 @@
             margin-bottom: 5px;
             color: #555;
         }
-        input[type="text"], input[type="tel"], input[type="email"] {
+        input[type="email"], input[type="text"] {
             width: 100%;
             padding: 12px;
             font-size: 1rem;
@@ -49,7 +49,7 @@
             box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
             transition: border-color 0.3s;
         }
-        input[type="text"]:focus, input[type="tel"]:focus, input[type="email"]:focus {
+        input[type="email"]:focus, input[type="text"]:focus {
             border-color: #007bff;
             outline: none;
         }
@@ -94,39 +94,37 @@
 </head>
 <body>
     <div class="container">
-        <h1>Enter Customer Details</h1>
-        <form method="POST" onsubmit="return validateForm()">
-            <div class="form-group">
-                <label for="name">Name:</label>
-                <input type="text" name="name" id="name" required>
-            </div>
-            <div class="form-group">
-                <label for="phone">Phone Number:</label>
-                <input type="tel" name="phone" id="phone" required>
-                <div id="error-message" class="error">Please enter a valid 10-digit phone number.</div>
-            </div>
-            <div class="form-group">
-                <label for="email">Email:</label>
-                <input type="email" name="email" id="useremail" required>
-            </div>
-            <button type="submit" class="button">Next</button>
-        </form>
+        <h1>Admin Login</h1>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul>
+                    {% for message in messages %}
+                        <li style="color: red;">{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+
+        {% if not otp_sent %}
+            <form method="POST">
+                <div class="form-group">
+                    <label for="email">Email Address:</label>
+                    <input type="email" name="email" id="adminemail" required placeholder="Enter your email">
+                    <div id="email-error" class="error">Please enter a valid email address.</div>
+                </div>
+                <button type="submit" class="button">Send OTP</button>
+            </form>
+        {% else %}
+            <form method="POST">
+                <div class="form-group">
+                    <label for="otp">Enter OTP:</label>
+                    <input type="text" name="otp" id="otp" required placeholder="Enter OTP sent to your email">
+                </div>
+                <button type="submit" class="button">Verify OTP</button>
+            </form>
+        {% endif %}
+        
         <button onclick="location.href='/'" class="button back-button">Back to Home</button>
     </div>
-    <script>
-        function validateForm() {
-            const phone = document.getElementById("phone").value;
-            const errorMessage = document.getElementById("error-message");
-            const phonePattern = /^[0-9]{10}$/;
-
-            if (!phonePattern.test(phone)) {
-                errorMessage.style.display = "block";
-                return false;
-            } else {
-                errorMessage.style.display = "none";
-                return true;
-            }
-        }
-    </script>
 </body>
 </html>
