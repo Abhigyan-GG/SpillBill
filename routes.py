@@ -1,3 +1,6 @@
+from email.encoders import encode_base64
+from email.mime.application import MIMEApplication
+
 from flask import Flask, render_template, request, redirect, url_for, jsonify, send_file, session, flash
 from flask_mail import Mail, Message
 from app import app, db
@@ -14,10 +17,8 @@ import os
 import json
 import secrets
 
-
 # Secret key for session management
 app.secret_key = secrets.token_hex(16)  # Generates a random 16-byte hexadecimal string
-
 
 # Flask-Mail configuration for Gmail
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
@@ -82,10 +83,22 @@ def delete_product(id):
 @app.route('/customer_details', methods=['GET', 'POST'])
 def customer_details():
     if request.method == 'POST':
+        print("Received POST request")
+        print(f"Request form data: {request.form}")  # Logs all received form data
+
         user_name = request.form.get('name')
         phone_number = request.form.get('phone')
         useremail = request.form.get('email')
+
+        if not useremail:
+            print("Email field is missing or empty!")  # Debugging message
+            flash("Please enter a valid email address.", "danger")
+            return redirect(url_for('customer_details'))
+
+        print(f"Form data - Name: {user_name}, Phone: {phone_number}, Email: {useremail}")
+
         return redirect(url_for('scan_products', name=user_name, phone=phone_number, email=useremail))
+
     return render_template('customer_details.html')
 
 # Route to scan products and add by name
@@ -95,48 +108,48 @@ def scan_products():
     phone_number = request.args.get('phone')
     useremail = request.args.get('email')
 
-    # Retrieve scanned products from the session (or initialize if not present)
-    scanned_products = session.get('scanned_products', [])
+    # Initialize session['scanned_products'] if it doesn't exist
+    if 'scanned_products' not in session:
+        session['scanned_products'] = []
+        print("Session initialized with an empty product list.")
 
     if request.method == 'POST':
-        product_name = request.form['product_name']
+        product_name = request.form.get('product_name')
+
         if product_name:
-            product = Product.query.filter_by(name=product_name).first()
+            # Find product by name (case-insensitive)
+            product = Product.query.filter(Product.name.ilike(product_name)).first()
+
             if product:
-                # Update scanned_products list
-                existing_product = next((p for p in scanned_products if p['name'] == product.name), None)
+                # Update scanned_products list in the session
+                existing_product = next((p for p in session['scanned_products'] if p['name'] == product.name), None)
                 if existing_product:
                     existing_product['quantity'] += 1
                 else:
-                    scanned_products.append({'name': product.name, 'price': product.price, 'quantity': 1})
+                    session['scanned_products'].append({'name': product.name, 'price': product.price, 'quantity': 1})
 
-                # Save updated scanned_products to session
-                session['scanned_products'] = scanned_products
-
-                # Render the updated scan products page
-                return render_template('scan_products.html', name=user_name, phone=phone_number,
-                                       email=useremail, scanned_products=json.dumps(scanned_products))
+                # Save session changes
+                session.modified = True
+                print("Session after adding product:", session)
+                return redirect(url_for('scan_products', name=user_name, phone=phone_number, email=useremail))
             else:
                 flash("Product not found in inventory", "danger")
 
-    # Render the scan products page with scanned products
+    print(f"Scanned products in session: {session['scanned_products']}")  # Debugging statement
     return render_template('scan_products.html', name=user_name, phone=phone_number, email=useremail,
-                           scanned_products=json.dumps(scanned_products))
-
-
-# API to fetch product list for adding by name
-@app.route('/api/products')
-def get_products():
-    products = Product.query.all()
-    return jsonify([{'name': product.name, 'price': product.price} for product in products])
-
-# Ensure the bills directory exists
-if not os.path.exists('bills'):
-    os.makedirs('bills')
+                           scanned_products=session['scanned_products'])
 
 # Route to generate bill and send email to the user
 @app.route('/generate_bill', methods=['POST'])
 def generate_bill():
+    # Retrieve scanned products from session
+    if 'scanned_products' not in session or not session['scanned_products']:
+        flash("No products scanned.", "danger")
+        print("No products scanned in session.")
+        return redirect(url_for('scan_products'))
+
+    scanned_products = session['scanned_products']
+
     print("Generating Bill...")  # Debugging statement
     now = datetime.now()
     timestamp = now.strftime("%d-%m-%Y_%H-%M-%S")
@@ -153,9 +166,7 @@ def generate_bill():
         flash("Email is required.", "danger")
         return redirect(url_for('customer_details'))
 
-    # Retrieve scanned products from session
-    scanned_products = session.get('scanned_products', [])
-
+    # Retrieve scanned products from global variable
     print(f"Scanned Products: {scanned_products}")  # Debugging statement
 
     if not scanned_products:
@@ -168,7 +179,7 @@ def generate_bill():
     sgst = subtotal * 0.025
     grand_total = subtotal + cgst + sgst
 
-    # Generate PDF (you already have this part)
+    # Generate PDF
     c = canvas.Canvas(pdf_filename, pagesize=A4)
     width, height = A4
     c.setFont("Helvetica-Bold", 16)
@@ -200,31 +211,39 @@ def generate_bill():
     c.drawString(100, y, f"SGST (2.5%): ₹{sgst:.2f}")
     y -= 20
     c.drawString(100, y, f"Grand Total: ₹{grand_total:.2f}")
-    y -= 40
-    c.setFont("Helvetica-Oblique", 10)
-    c.drawString(100, y, f"Payment Method: Cash/Card/UPI")
-    c.drawString(100, y - 20, "Thank you for shopping with us!")
+
     c.save()
 
-    # Send the bill email
-    send_bill_email(useremail, user_name, grand_total)
+    # Send email with the bill attached
+    try:
+        msg = MIMEMultipart()
+        msg['From'] = 'project.spillbill@gmail.com'
+        msg['To'] = useremail
+        msg['Subject'] = f'Your SpillBILL - Bill {timestamp}'
 
-    return render_template(
-        'total_bill.html',
-        products=scanned_products,
-        total_price=grand_total,
-        date=now.strftime("%d/%m/%Y"),
-        time=now.strftime("%H:%M:%S"),
-        bill_no=timestamp,
-        cashier="Your Cashier Name",
-        subtotal=subtotal,
-        cgst=cgst,
-        sgst=sgst,
-        grand_total=grand_total,
-        payment_method="Cash/Card/UPI",
-        pdf_path=pdf_filename
-    )
+        body = f"Dear {user_name},\n\nThank you for shopping with us. Your bill is attached below."
+        msg.attach(MIMEText(body, 'plain'))
 
+        # Attach the PDF file
+        with open(pdf_filename, "rb") as file:
+            msg.attach(MIMEApplication(file.read(), _subtype="pdf", _encoder=encode_base64))
+
+        # Send the email
+        server = smtplib.SMTP('smtp.gmail.com', 587)
+        server.starttls()
+        server.login('project.spillbill@gmail.com', 'mcda vjia mnmr vdgb')
+        text = msg.as_string()
+        server.sendmail('project.spillbill@gmail.com', useremail, text)
+        server.quit()
+
+        flash("Bill generated and emailed successfully.", "success")
+    except Exception as e:
+        flash(f"Error generating bill or sending email: {e}", "danger")
+
+        # Clear scanned products after bill is generated
+        session.pop('scanned_products', None)
+
+    return redirect(url_for('home'))
 
 
 # Function to send OTP to admin with error handling
@@ -248,6 +267,17 @@ def send_bill_email(useremail, user_name, grand_total):
         mail.send(msg)
     except Exception as e:
         flash(f"Error sending bill email: {e}", "danger")
+
+# API to fetch product list for adding by name
+@app.route('/api/products')
+def get_products():
+    products = Product.query.all()
+    return jsonify([{'name': product.name, 'price': product.price} for product in products])
+
+# Ensure the bills directory exists
+if not os.path.exists('bills'):
+    os.makedirs('bills')
+
 
 # Mails for Admin Login
 
@@ -323,6 +353,17 @@ def logout():
     session.pop('admin_logged_in', None)  # Remove admin session
     session.pop('otp', None)  # Clear OTP session
     return redirect(url_for('index'))  # Redirect to home page (index.html)
+
+
+@app.route('/test_session')
+def test_session():
+    # Set a value in the session
+    session['scanned_products'] = [{'name': 'miLK', 'price': 50, 'quantity': 2}]
+
+    # Print the session to see if the data persists
+    print(f"Test Session: {session.get('scanned_products')}")
+
+    return "Session Test Complete!"
 
 
 if __name__ == '__main__':

@@ -74,6 +74,7 @@
         <form method="POST" action="{{ url_for('generate_bill') }}">
             <input type="hidden" name="name" value="{{ name }}">
             <input type="hidden" name="phone" value="{{ phone }}">
+            <input type="hidden" name="email" value="{{ email }}">
             <input type="hidden" name="products" id="products-input" value="">
             <button type="submit">Generate Bill</button>
         </form>
