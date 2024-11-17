@@ -102,152 +102,169 @@ def customer_details():
 
     return render_template('customer_details.html')
 
-# Route to scan products and add by name
+# Routes for scanning products
 @app.route('/scan_products', methods=['GET', 'POST'])
 def scan_products():
+    # Retrieve query parameters for customer details
     user_name = request.args.get('name')
     phone_number = request.args.get('phone')
     useremail = request.args.get('email')
 
-    # Initialize session['scanned_products'] if it doesn't exist
-    if 'scanned_products' not in session:
-        session['scanned_products'] = []
-        print("Session initialized with an empty product list.")
+    # Initialize scanned_products in session if not present
+    session.setdefault('scanned_products', [])
+    print("Session initialized with an empty product list.") if not session['scanned_products'] else None
 
     if request.method == 'POST':
-        product_name = request.form.get('product_name')
-        print(f"Received POST request to add product: {product_name}")  # Debugging statement
+        # Check if product_name field exists and is not empty
+        if not request.form.get('product_name'):
+            print("Error: No product name provided in the request.")
+            flash("Product name is required to add an item.", "danger")
+            return redirect(url_for('scan_products', name=user_name, phone=phone_number, email=useremail))
+
+        product_name = request.form.get('product_name', '').strip()
+        print(f"POST request received to add product: {product_name}")  # Debugging
 
         if product_name:
-            # Find product by name (case-insensitive)
+            # Search for product in the inventory, case-insensitive
             product = Product.query.filter(Product.name.ilike(product_name)).first()
-            print(f"Queried Product: {product}")  # Debugging statement
-
             if product:
-                # Update scanned_products list in the session
-                existing_product = next((p for p in session['scanned_products'] if p['name'] == product.name), None)
-                if existing_product:
-                    existing_product['quantity'] += 1
+                # Update product quantity in the session or add a new product
+                for scanned in session['scanned_products']:
+                    if scanned['name'].lower() == product.name.lower():
+                        scanned['quantity'] += 1
+                        break
                 else:
-                    session['scanned_products'].append({'name': product.name, 'price': product.price, 'quantity': 1})
-
-                # Save session changes
-                session.modified = True
-                print("Session after adding product:", session['scanned_products'])  # Debugging statement
+                    session['scanned_products'].append({
+                        'name': product.name,
+                        'price': product.price,
+                        'quantity': 1
+                    })
+                session.modified = True  # Mark session as modified
+                print(f"Product {product.name} added/updated in session.")
                 return redirect(url_for('scan_products', name=user_name, phone=phone_number, email=useremail))
             else:
-                flash("Product not found in inventory", "danger")
+                flash("Product not found in inventory.", "danger")
 
-    print(f"Scanned products in session: {session['scanned_products']}")  # Debugging statement
-    return render_template('scan_products.html', name=user_name, phone=phone_number, email=useremail,
-                           scanned_products=session['scanned_products'])
+    return render_template(
+        'scan_products.html',
+        name=user_name, phone=phone_number, email=useremail,
+        scanned_products=session['scanned_products']
+    )
 
-
-# Route to generate bill and send email to the user
+# Routes to generate bill
 @app.route('/generate_bill', methods=['POST'])
 def generate_bill():
-    # Retrieve scanned products from session
-    scanned_products = session.get('scanned_products', [])
+    print("Received POST request")
+    print("Request form data:", request.form)
 
-    if not scanned_products:
-        flash("No products scanned.", "danger")
-        print("No products scanned in session.")
+    # Check for 'products' field in the POST request
+    products_json = request.form.get('products')
+    if not products_json:
+        print("Error: No products were provided in the request.")
+        flash("No products were selected.", "danger")
         return redirect(url_for('scan_products'))
 
-    print("Generating Bill...")  # Debugging statement
-    now = datetime.now()
-    timestamp = now.strftime("%d-%m-%Y_%H-%M-%S")
-    pdf_filename = f'bills/bill_{timestamp}.pdf'
+    # Deserialize the products
+    try:
+        scanned_products = json.loads(products_json)
+        print(f"Deserialized products: {scanned_products}")
+    except json.JSONDecodeError as e:
+        print(f"Error decoding products JSON: {e}")
+        flash("Invalid product data received.", "danger")
+        return redirect(url_for('scan_products'))
 
-    # Get form data
-    user_name = request.form.get("name")
-    phone_number = request.form.get("phone")
-    useremail = request.form.get("email")
+    # Check if the deserialized list is empty
+    if not scanned_products:
+        print("Error: Empty product list received.")
+        flash("No products were selected.", "danger")
+        return redirect(url_for('scan_products'))
 
-    print(f"Form data - Name: {user_name}, Phone: {phone_number}, Email: {useremail}")  # Debugging statement
+    # Retrieve form data
+    user_name = request.form.get("name", "Customer")
+    phone_number = request.form.get("phone", "Unknown")
+    useremail = request.form.get("email", "").strip()
 
+    # Ensure the email field is not empty
     if not useremail:
         flash("Email is required.", "danger")
         return redirect(url_for('customer_details'))
 
-    # Retrieve scanned products from session
-    print(f"Scanned Products: {scanned_products}")  # Debugging statement
-
-    if not scanned_products:
-        flash("No products scanned.", "danger")
-        return redirect(url_for('scan_products', name=user_name, phone=phone_number, email=useremail))
-
-    # Bill generation logic
-    subtotal = sum(product['price'] * product['quantity'] for product in scanned_products)
-    cgst = subtotal * 0.025
-    sgst = subtotal * 0.025
+    # Calculate totals
+    subtotal = sum(item['price'] * item['quantity'] for item in scanned_products)
+    cgst = sgst = subtotal * 0.025  # 2.5% tax
     grand_total = subtotal + cgst + sgst
 
-    # Generate PDF
-    c = canvas.Canvas(pdf_filename, pagesize=A4)
-    width, height = A4
-    c.setFont("Helvetica-Bold", 16)
-    c.drawString(100, height - 80, f"SpillBILL - Customer Bill")
-    c.setFont("Helvetica", 12)
-    c.drawString(100, height - 110, f"Customer Name: {user_name}")
-    c.drawString(100, height - 130, f"Phone: {phone_number}")
-    c.drawString(100, height - 150, f"Date: {now.strftime('%d/%m/%Y')}")
-    c.drawString(100, height - 170, f"Time: {now.strftime('%H:%M:%S')}")
-    c.drawString(100, height - 190, f"Bill No.: {timestamp}")
-    c.drawString(100, height - 210, f"Cashier: Your Cashier Name")
-    c.drawString(100, height - 230, "Items Purchased:")
+    # Generate bill filename
+    now = datetime.now()
+    timestamp = now.strftime("%d-%m-%Y_%H-%M-%S")
+    pdf_filename = f'bills/bill_{timestamp}.pdf'
 
-    # Add items to PDF
-    y = height - 260
-    for product in scanned_products:
-        c.drawString(100, y, product['name'])
-        c.drawString(250, y, str(product['quantity']))
-        c.drawString(400, y, f"{product['price'] * product['quantity']:.2f}")
-        y -= 20
-
-    # Add totals
-    c.setFont("Helvetica-Bold", 12)
-    y -= 20
-    c.drawString(100, y, f"Subtotal: ₹{subtotal:.2f}")
-    y -= 20
-    c.drawString(100, y, f"CGST (2.5%): ₹{cgst:.2f}")
-    y -= 20
-    c.drawString(100, y, f"SGST (2.5%): ₹{sgst:.2f}")
-    y -= 20
-    c.drawString(100, y, f"Grand Total: ₹{grand_total:.2f}")
-
-    c.save()
-
-    # Send email with the bill attached
+    # Create PDF
     try:
+        c = canvas.Canvas(pdf_filename, pagesize=A4)
+        width, height = A4
+        c.setFont("Helvetica-Bold", 16)
+        c.drawString(100, height - 80, "SpillBILL - Customer Bill")
+        c.setFont("Helvetica", 12)
+        c.drawString(100, height - 110, f"Customer Name: {user_name}")
+        c.drawString(100, height - 130, f"Phone: {phone_number}")
+        c.drawString(100, height - 150, f"Date: {now.strftime('%d/%m/%Y')}")
+        c.drawString(100, height - 170, f"Time: {now.strftime('%H:%M:%S')}")
+        c.drawString(100, height - 190, f"Bill No.: {timestamp}")
+        c.drawString(100, height - 210, "Items Purchased:")
+
+        # Populate product details in the PDF
+        y = height - 240
+        for product in scanned_products:
+            c.drawString(100, y, product['name'])
+            c.drawString(300, y, f"{product['quantity']}")
+            c.drawString(450, y, f"₹{product['price'] * product['quantity']:.2f}")
+            y -= 20
+        c.drawString(100, y, f"Subtotal: ₹{subtotal:.2f}")
+        c.drawString(100, y - 20, f"CGST (2.5%): ₹{cgst:.2f}")
+        c.drawString(100, y - 40, f"SGST (2.5%): ₹{sgst:.2f}")
+        c.drawString(100, y - 60, f"Grand Total: ₹{grand_total:.2f}")
+        c.save()
+
+        # Send email
         msg = MIMEMultipart()
         msg['From'] = 'project.spillbill@gmail.com'
         msg['To'] = useremail
-        msg['Subject'] = f'Your SpillBILL - Bill {timestamp}'
-
-        body = f"Dear {user_name},\n\nThank you for shopping with us. Your bill is attached below."
-        msg.attach(MIMEText(body, 'plain'))
-
-        # Attach the PDF file
-        with open(pdf_filename, "rb") as file:
-            msg.attach(MIMEApplication(file.read(), _subtype="pdf", _encoder=encode_base64))
-
-        # Send the email
+        msg['Subject'] = f'SpillBILL - Your Bill {timestamp}'
+        msg.attach(MIMEText(f"Dear {user_name},\n\nPlease find your bill attached.", 'plain'))
+        with open(pdf_filename, "rb") as pdf:
+            msg.attach(MIMEApplication(pdf.read(), _subtype="pdf"))
         server = smtplib.SMTP('smtp.gmail.com', 587)
         server.starttls()
         server.login('project.spillbill@gmail.com', 'mcda vjia mnmr vdgb')
-        text = msg.as_string()
-        server.sendmail('project.spillbill@gmail.com', useremail, text)
+        server.send_message(msg)
         server.quit()
-
-        flash("Bill generated and emailed successfully.", "success")
+        flash("Bill generated and sent successfully.", "success")
     except Exception as e:
         flash(f"Error generating bill or sending email: {e}", "danger")
 
-    # Clear scanned products after bill is generated
-    session.pop('scanned_products', None)
+    session.pop('scanned_products', None)  # Clear scanned products
 
-    return redirect(url_for('home'))
+    # Prepare data to pass to the template
+    date = now.strftime('%d/%m/%Y')
+    time = now.strftime('%H:%M:%S')
+    bill_no = timestamp
+    cashier = "Admin"  # You can replace this with actual admin name if needed
+
+    # Return the rendered total_bill.html with all the necessary data
+    return render_template(
+        'total_bill.html',
+        date=date,
+        time=time,
+        bill_no=bill_no,
+        cashier=cashier,
+        products=scanned_products,
+        subtotal=subtotal,
+        cgst=cgst,
+        sgst=sgst,
+        grand_total=grand_total,
+        payment_method="Cash"  # Update with actual payment method if needed
+    )
 
 
 # Function to send OTP to admin with error handling
