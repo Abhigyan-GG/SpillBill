@@ -1,6 +1,5 @@
 from email.encoders import encode_base64
 from email.mime.application import MIMEApplication
-
 from flask import Flask, render_template, request, redirect, url_for, jsonify, send_file, session, flash
 from flask_mail import Mail, Message
 from app import app, db
@@ -25,9 +24,11 @@ app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USERNAME'] = 'project.spillbill@gmail.com'  # Replace with your email
-app.config['MAIL_PASSWORD'] =   # Replace with your email password
-
+app.config['MAIL_PASSWORD'] = 'mcda vjia mnmr vdgb'   # Replace with your email password
+app.config['SESSION_TYPE'] = 'filesystem'
+# Initialize extensions
 mail = Mail(app)
+
 
 # Home route
 @app.route('/')
@@ -115,10 +116,12 @@ def scan_products():
 
     if request.method == 'POST':
         product_name = request.form.get('product_name')
+        print(f"Received POST request to add product: {product_name}")  # Debugging statement
 
         if product_name:
             # Find product by name (case-insensitive)
             product = Product.query.filter(Product.name.ilike(product_name)).first()
+            print(f"Queried Product: {product}")  # Debugging statement
 
             if product:
                 # Update scanned_products list in the session
@@ -130,7 +133,7 @@ def scan_products():
 
                 # Save session changes
                 session.modified = True
-                print("Session after adding product:", session)
+                print("Session after adding product:", session['scanned_products'])  # Debugging statement
                 return redirect(url_for('scan_products', name=user_name, phone=phone_number, email=useremail))
             else:
                 flash("Product not found in inventory", "danger")
@@ -139,16 +142,17 @@ def scan_products():
     return render_template('scan_products.html', name=user_name, phone=phone_number, email=useremail,
                            scanned_products=session['scanned_products'])
 
+
 # Route to generate bill and send email to the user
 @app.route('/generate_bill', methods=['POST'])
 def generate_bill():
     # Retrieve scanned products from session
-    if 'scanned_products' not in session or not session['scanned_products']:
+    scanned_products = session.get('scanned_products', [])
+
+    if not scanned_products:
         flash("No products scanned.", "danger")
         print("No products scanned in session.")
         return redirect(url_for('scan_products'))
-
-    scanned_products = session['scanned_products']
 
     print("Generating Bill...")  # Debugging statement
     now = datetime.now()
@@ -166,7 +170,7 @@ def generate_bill():
         flash("Email is required.", "danger")
         return redirect(url_for('customer_details'))
 
-    # Retrieve scanned products from global variable
+    # Retrieve scanned products from session
     print(f"Scanned Products: {scanned_products}")  # Debugging statement
 
     if not scanned_products:
@@ -240,8 +244,8 @@ def generate_bill():
     except Exception as e:
         flash(f"Error generating bill or sending email: {e}", "danger")
 
-        # Clear scanned products after bill is generated
-        session.pop('scanned_products', None)
+    # Clear scanned products after bill is generated
+    session.pop('scanned_products', None)
 
     return redirect(url_for('home'))
 

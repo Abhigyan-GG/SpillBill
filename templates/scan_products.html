@@ -92,8 +92,9 @@
                 const response = await fetch('/api/products');
                 if (response.ok) {
                     availableProducts.length = 0;
+
                     const data = await response.json();
- 
+
                     data.forEach(product => availableProducts.push(product));
                 }
             } catch (error) {
@@ -160,9 +161,9 @@
                 productItem.innerHTML = `
                     ${product.name} - ₹${product.price.toFixed(2)}
                     <div class="quantity-controls">
-                        <button onclick="decreaseQuantity(${index})">-</button>
+                        <button type="button" onclick="decreaseQuantity(${index})">-</button>
                         <span>${product.quantity}</span>
-                        <button onclick="increaseQuantity(${index})">+</button>
+                        <button type="button" onclick="increaseQuantity(${index})">+</button>
                     </div>
                 `;
                 productList.appendChild(productItem);
@@ -183,22 +184,24 @@
             }
             updateProductList();
             document.getElementById('products-input').value = JSON.stringify(scannedProducts);
-
+  
         }
 
 
         function addByName() {
+           
             const productName = document.getElementById('product-name').value.trim();
-
+           
 
             const product = availableProducts.find(p => p.name.toLowerCase() === productName.toLowerCase());
-
+            
 
             if (product) {
                 addOrUpdateProduct(product.name, product.price);
                 document.getElementById('product-name').value = '';
+           
                 document.getElementById('error-message').textContent = '';
- 
+           
             } else {
                 document.getElementById('error-message').textContent = 'Product not found in inventory.';
             }
