@@ -231,7 +231,10 @@ def generate_bill():
         msg['From'] = 'project.spillbill@gmail.com'
         msg['To'] = useremail
         msg['Subject'] = f'SpillBILL - Your Bill {timestamp}'
-        msg.attach(MIMEText(f"Dear {user_name},\n\nPlease find your bill attached.", 'plain'))
+        msg.attach(MIMEText(
+            f"Dear {user_name},\n\nWe are pleased to provide you with your monthly e-bill for your recent transactions with {user_name}. Please find the attached document for detailed billing information."
+            f"\n\nKindly review the e-bill at your earliest convenience. If you have any questions or require further assistance, our customer support team is available to help. \n\nWe value your business and appreciate your prompt attention to this matter. Thank you for choosing SpillBill.",
+            'plain'))
         with open(pdf_filename, "rb") as pdf:
             msg.attach(MIMEApplication(pdf.read(), _subtype="pdf"))
         server = smtplib.SMTP('smtp.gmail.com', 587)
@@ -302,7 +305,8 @@ if not os.path.exists('bills'):
 
 # Mails for Admin Login
 
-pre_approved_emails = ["project.spillbill@gmail.com","manitjha032@gmail.com"]
+pre_approved_emails = ["project.spillbill@gmail.com","saivatsias@gmail.com","manitjha032@gmail.com","rohitgangwar49752@gmail.com"
+,"vabhravi22@gmail.com","daksh.kasana19@gmail.com"]
 
 
 # Admin login route
