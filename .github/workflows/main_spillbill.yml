@@ -64,4 +64,4 @@ jobs:
         with:
           app-name: 'SpillBill'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_6DBA0E5AE1AB41BD8A1A08B6746FC971 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_85EB637948E44561A922C32BAB608024 }}
