@@ -8,8 +8,12 @@
     <style>
         body {
             font-family: 'Roboto', sans-serif;
-            background: linear-gradient(135deg, #74ebd5, #ACB6E5);
-            color: #333;
+            background: linear-gradient(to bottom, #e6f3ff, #ffffff); /* Fallback gradient */
+            background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"%3E%3Cpath fill="%234f9fcf" fill-opacity="1" d="M0,96L40,106.7C80,117,160,139,240,122.7C320,107,400,53,480,48C560,43,640,85,720,112C800,139,880,149,960,154.7C1040,160,1120,160,1200,165.3C1280,171,1360,181,1400,186.7L1440,192L1440,320L1400,320C1360,320,1280,320,1200,320C1120,320,1040,320,960,320C880,320,800,320,720,320C640,320,560,320,480,320C400,320,320,320,240,320C160,320,80,320,40,320L0,320Z"%3E%3C/path%3E%3Cpath fill="%234C84B1" fill-opacity="1" d="M0,128L40,133.3C80,139,160,149,240,138.7C320,128,400,96,480,80C560,64,640,64,720,74.7C800,85,880,107,960,117.3C1040,128,1120,128,1200,128C1280,128,1360,128,1400,128L1440,128L1440,320L1400,320C1360,320,1280,320,1200,320C1120,320,1040,320,960,320C880,320,800,320,720,320C640,320,560,320,480,320C400,320,320,320,240,320C160,320,80,320,40,320L0,320Z"%3E%3C/path%3E%3Cpath fill="%2379A9C9" fill-opacity="1" d="M0,160L40,154.7C80,149,160,139,240,122.7C320,107,400,85,480,64C560,43,640,21,720,37.3C800,53,880,107,960,117.3C1040,128,1120,96,1200,80C1280,64,1360,64,1400,64L1440,64L1440,320L1400,320C1360,320,1280,320,1200,320C1120,320,1040,320,960,320C880,320,800,320,720,320C640,320,560,320,480,320C400,320,320,320,240,320C160,320,80,320,40,320L0,320Z"%3E%3C/path%3E%3Cpath fill="%2393C4D9" fill-opacity="1" d="M0,192L40,202.7C80,213,160,235,240,218.7C320,203,400,149,480,144C560,139,640,181,720,186.7C800,192,880,160,960,128C1040,96,1120,64,1200,80C1280,96,1360,160,1400,192L1440,224L1440,320L1400,320C1360,320,1280,320,1200,320C1120,320,1040,320,960,320C880,320,800,320,720,320C640,320,560,320,480,320C400,320,320,320,240,320C160,320,80,320,40,320L0,320Z"%3E%3C/path%3E%3Cpath fill="%2397BCCF" fill-opacity="1" d="M0,224L40,245.3C80,267,160,309,240,309.3C320,309,400,267,480,256C560,245,640,267,720,277.3C800,288,880,288,960,266.7C1040,245,1120,203,1200,170.7C1280,139,1360,117,1400,106.7L1440,96L1440,320L1400,320C1360,320,1280,320,1200,320C1120,320,1040,320,960,320C880,320,800,320,720,320C640,320,560,320,480,320C400,320,320,320,240,320C160,320,80,320,40,320L0,320Z"%3E%3C/path%3E%3Cpath fill="%239FC8D6" fill-opacity="1" d="M0,256L40,277.3C80,299,160,341,240,341.3C320,341,400,299,480,288C560,277,640,299,720,309.3C800,320,880,320,960,298.7C1040,277,1120,235,1200,202.7C1280,171,1360,149,1400,138.7L1440,128L1440,320L1400,320C1360,320,1280,320,1200,320C1120,320,1040,320,960,320C880,320,800,320,720,320C640,320,560,320,480,320C400,320,320,320,240,320C160,320,80,320,40,320L0,320Z"%3E%3C/path%3E%3Cpath fill="%2320709A" fill-opacity="1" d="M0,288L40,298.7C80,309,160,299,240,282.7C320,266,400,224,480,213.3C560,202,640,213,720,213.3C800,213,880,213,960,213.3C1040,213,1120,213,1200,213.3C1280,213,1360,213,1400,213.3L1440,213L1440,320L1400,320C1360,320,1280,320,1200,320C1120,320,1040,320,960,320C880,320,800,320,720,320C640,320,560,320,480,320C400,320,320,320,240,320C160,320,80,320,40,320L0,320Z"%3E%3C/path%3E%3C/svg%3E');
+            background-size: 200% 100%; /* Stretch to 2x width */
+            background-repeat: repeat-x; /* Repeat the background image horizontally */
+            background-attachment: fixed;
+            color: #002f66;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -17,74 +21,79 @@
             height: 100vh;
             margin: 0;
             text-align: center;
+            animation: waveAnimation 10s linear infinite; /* Infinite looping animation */
         }
+
+        @keyframes waveAnimation {
+            0% {
+                background-position: 0 0; /* Start at the left */
+            }
+            100% {
+                background-position: 100% 0; /* Move to the right */
+            }
+        }
+
         .container {
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.95);
             padding: 40px 20px;
             border-radius: 12px;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-            max-width: 500px;
+            max-width: 600px;
             width: 100%;
         }
+
+        img.icon {
+            width: 60px;
+            margin-bottom: 15px;
+        }
+
         h1 {
-            font-size: 3rem;
-            color: #007bff;
+            font-size: 36px;
+            margin: 20px 0;
+            color: #333;
+        }
+
+        p {
+            font-size: 18px;
+            color: #555;
             margin-bottom: 20px;
         }
-        p {
-            font-size: 1.2rem;
-            margin-bottom: 30px;
-        }
+
         .button-container {
             display: flex;
             justify-content: center;
             gap: 20px;
-            flex-wrap: wrap;
         }
+
         .button {
-            padding: 15px 30px;
-            font-size: 1.2rem;
+            background-color: #00B4D8;
             color: white;
-            background-color: #007bff;
-            border: none;
-            border-radius: 8px;
+            padding: 12px 20px;
+            font-size: 18px;
+            border-radius: 6px;
             text-decoration: none;
-            transition: background-color 0.3s, transform 0.2s;
-            box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
         }
+
         .button:hover {
-            background-color: #0056b3;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(0, 123, 255, 0.4);
+            background-color: #1D3557;
+            transform: translateY(-3px);
         }
-        .icon {
-            width: 50px;
-            margin-bottom: 10px;
-        }
+
         .footer {
-            margin-top: 50px;
-            font-size: 0.9rem;
-            color: #666;
-        }
-        @media (max-width: 600px) {
-            h1 {
-                font-size: 2.5rem;
-            }
-            p {
-                font-size: 1rem;
-            }
-            .button {
-                font-size: 1rem;
-                padding: 12px 20px;
-            }
+            position: absolute;
+            bottom: 20px;
+            color: #777;
+            font-size: 14px;
         }
     </style>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
+
     <div class="container">
         <img src="{{ url_for('static', filename='favicon.png') }}" alt="SpillBILL Logo" class="icon">
-        <h1>Welcome to SpillBILL</h1>
+        <h1>Welcome to SpillBill</h1>
         <p>Your ultimate billing and inventory management solution.</p>
         <div class="button-container">
             <a href="{{ url_for('admin_login') }}" class="button">Admin Login</a>
