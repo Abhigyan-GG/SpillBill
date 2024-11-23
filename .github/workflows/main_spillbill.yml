@@ -11,41 +11,50 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      # Step 1: Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      - name: Set up Python version
+      # Step 2: Debugging step to list all files and confirm the presence of requirements.txt
+      - name: Debug: List files in the repository
+        run: ls -R
+
+      # Step 3: Set up Python version
+      - name: Set up Python
         uses: actions/setup-python@v1
         with:
           python-version: '3.12'
 
-      - name: Debug: List files after checkout
-        run: ls -R
-
-      - name: Create and start virtual environment
+      # Step 4: Create and activate a virtual environment
+      - name: Set up virtual environment
         run: |
           python -m venv venv
           source venv/bin/activate
 
+      # Step 5: Install dependencies
       - name: Install dependencies
         run: |
           source venv/bin/activate
           pip install -r requirements.txt
 
-      - name: Debug: Verify installed packages
-        run: pip list
+      # Step 6: Optional: Add tests if required
+      # Uncomment the lines below if you want to run tests
+      # - name: Run tests
+      #   run: |
+      #     source venv/bin/activate
+      #     pytest
 
+      # Step 7: Package the application for deployment
       - name: Zip artifact for deployment
         run: |
-          zip release.zip ./* -r
-          zip release.zip requirements.txt
+          zip -r release.zip . -x venv/**\*
 
-      - name: Upload artifact for deployment jobs
+      # Step 8: Upload the artifact for the deployment job
+      - name: Upload artifact for deployment
         uses: actions/upload-artifact@v3
         with:
           name: python-app
-          path: |
-            release.zip
-            !venv/
+          path: release.zip
 
   deploy:
     runs-on: ubuntu-latest
@@ -55,21 +64,21 @@ jobs:
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 
     steps:
+      # Step 1: Download the artifact from the build job
       - name: Download artifact from build job
         uses: actions/download-artifact@v3
         with:
           name: python-app
 
-      - name: Debug: List files after artifact download
-        run: ls -R
-
-      - name: Unzip artifact for deployment
+      # Step 2: Unzip the artifact for deployment
+      - name: Unzip artifact
         run: unzip release.zip
 
-      - name: 'Deploy to Azure Web App'
+      # Step 3: Deploy the app to Azure Web App
+      - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v2
         id: deploy-to-webapp
         with:
-          app-name: 'SpillBill'
+          app-name: 'SpillBill'  # Replace with your Azure App Service name
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_061B39F4FDAE467BA360CBC795964474 }}
