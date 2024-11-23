@@ -1,3 +1,7 @@
+# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
+# More GitHub Actions for Azure: https://github.com/Azure/actions
+# More info on Python, GitHub Actions, and Azure App Service: https://aka.ms/python-webapps-actions
+
 name: Build and deploy Python app to Azure Web App - SpillBill
 
 on:
@@ -11,50 +15,33 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Checkout the repository
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      # Step 2: Debugging step to list all files and confirm the presence of requirements.txt
-      - name: Debug: List files in the repository
-        run: ls -R
-
-      # Step 3: Set up Python version
-      - name: Set up Python
-        uses: actions/setup-python@v1
+      - name: Set up Python version
+        uses: actions/setup-python@v5
         with:
           python-version: '3.12'
 
-      # Step 4: Create and activate a virtual environment
-      - name: Set up virtual environment
+      - name: Create and start virtual environment
         run: |
           python -m venv venv
           source venv/bin/activate
-
-      # Step 5: Install dependencies
+      
       - name: Install dependencies
-        run: |
-          source venv/bin/activate
-          pip install -r requirements.txt
+        run: pip install -r requirements.txt
+        
+      # Optional: Add step to run tests here (PyTest, Django test suites, etc.)
 
-      # Step 6: Optional: Add tests if required
-      # Uncomment the lines below if you want to run tests
-      # - name: Run tests
-      #   run: |
-      #     source venv/bin/activate
-      #     pytest
-
-      # Step 7: Package the application for deployment
       - name: Zip artifact for deployment
-        run: |
-          zip -r release.zip . -x venv/**\*
+        run: zip release.zip ./* -r
 
-      # Step 8: Upload the artifact for deployment
-      - name: Upload artifact for deployment
-        uses: actions/upload-artifact@v3
+      - name: Upload artifact for deployment jobs
+        uses: actions/upload-artifact@v4
         with:
           name: python-app
-          path: release.zip
+          path: |
+            release.zip
+            !venv/
 
   deploy:
     runs-on: ubuntu-latest
@@ -62,23 +49,30 @@ jobs:
     environment:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+    permissions:
+      id-token: write #This is required for requesting the JWT
 
     steps:
-      # Step 1: Download the artifact from the build job
       - name: Download artifact from build job
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: python-app
 
-      # Step 2: Unzip the artifact for deployment
-      - name: Unzip artifact
+      - name: Unzip artifact for deployment
         run: unzip release.zip
 
-      # Step 3: Deploy the app to Azure Web App
-      - name: Deploy to Azure Web App
-        uses: azure/webapps-deploy@v2
+      
+      - name: Login to Azure
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_38056039FB5344ED9EF45AD91DCDD52F }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_B58A835A485B4F64AAF88F655F03FF43 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_6073C1D95FAA46CFAD11C01B250C9E82 }}
+
+      - name: 'Deploy to Azure Web App'
+        uses: azure/webapps-deploy@v3
         id: deploy-to-webapp
         with:
-          app-name: 'SpillBill'  # Replace with your Azure App Service name
+          app-name: 'SpillBill'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_061B39F4FDAE467BA360CBC795964474 }}
+          
