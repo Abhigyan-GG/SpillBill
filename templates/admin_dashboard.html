@@ -12,27 +12,36 @@
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
             font-family: 'Roboto', sans-serif;
             text-align: center;
-            background: linear-gradient(135deg, #e0f7fa, #80deea);
+            background: linear-gradient(135deg, #cce7ff, #a9cbe8); /* Softer pastel blue background */
             color: #333;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
             margin: 0;
+            position: relative;
+            overflow: hidden;
         }
 
         .container {
             max-width: 800px;
+            width: 100%;
             background-color: #ffffff;
-            padding: 50px;
+            padding: 50px 40px;
             border-radius: 12px;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
             transform: scale(1);
             transition: all 0.3s ease;
+            z-index: 10;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
 
         .container:hover {
@@ -41,9 +50,7 @@
         }
 
         .header {
-            margin-bottom: 40px;
-            border-bottom: 2px solid #e0e0e0;
-            padding-bottom: 20px;
+            margin-bottom: 30px;
         }
 
         .logo {
@@ -68,8 +75,9 @@
         .button-container {
             display: flex;
             justify-content: center;
-            gap: 25px;
+            gap: 20px; /* Spacing between the buttons */
             flex-wrap: wrap;
+            margin-bottom: 20px; /* Reduced space below buttons */
         }
 
         .button {
@@ -84,6 +92,8 @@
             transition: all 0.3s ease;
             box-shadow: 0 6px 14px rgba(0, 123, 255, 0.3);
             transform: translateY(0);
+            width: 250px; /* Make buttons have the same width */
+            text-align: center;
         }
 
         .button:hover {
@@ -100,24 +110,28 @@
             display: inline-block;
             padding: 14px 28px;
             font-size: 1.1rem;
-            background-color: #6c757d;
+            background-color: #dc3545; /* Red background for logout */
             color: white;
             text-decoration: none;
             border-radius: 8px;
             box-shadow: 0 6px 12px rgba(108, 117, 125, 0.3);
             transition: all 0.3s ease;
-            margin-top: 30px;
+            margin-top: 15px; /* Reduced space between logout and other buttons */
+            width: 250px; /* Make logout button have the same width */
         }
 
+        /* Red Logout Button Hover and Active Effect */
         .back-button:hover {
-            background-color: #5a6268;
-            box-shadow: 0 8px 16px rgba(108, 117, 125, 0.4);
+            background-color: #c82333; /* Darker red on hover */
+            transform: translateY(-4px);
+            box-shadow: 0 10px 20px rgba(220, 53, 69, 0.4);
         }
 
         .back-button:active {
-            transform: translateY(2px);
+            transform: translateY(0);
         }
 
+        /* Footer */
         .footer {
             margin-top: 40px;
             font-size: 1rem;
@@ -132,6 +146,47 @@
         .footer a:hover {
             text-decoration: underline;
         }
+
+        /* Full-Page Infinite Waves */
+        .wave {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 200%;
+            height: 100vh;
+            background: linear-gradient(90deg, #007bff, #5dade2, #007bff, #80deea);
+            animation: wave-animation 10s linear infinite;
+            z-index: -1;
+        }
+
+        /* Wave Animation */
+        @keyframes wave-animation {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        /* Responsive design */
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .button {
+                font-size: 1.1rem;
+                padding: 14px 25px;
+                width: 200px;
+            }
+
+            .back-button {
+                font-size: 1rem;
+                padding: 12px 24px;
+                width: 200px;
+            }
+        }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 </head>
@@ -143,13 +198,18 @@
         </div>
         <p>Choose an option to continue:</p>
         <div class="button-container">
+            <!-- Inventory and Generate Bill buttons in one row -->
             <a href="{{ url_for('inventory') }}" class="button">Inventory</a>
             <a href="{{ url_for('customer_details') }}" class="button">Generate Bill</a>
         </div>
+        <!-- Logout button in a new row -->
         <a href="{{ url_for('logout') }}" class="back-button">Logout</a>
         <div class="footer">
             <p>&copy; 2024 SpillBILL | <a href="#">Privacy Policy</a></p>
         </div>
     </div>
+
+    <!-- Full-Page Infinite Waves -->
+    <div class="wave"></div>
 </body>
 </html>

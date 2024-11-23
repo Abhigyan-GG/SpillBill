@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Customer Details</title>
@@ -11,13 +10,33 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background-color: #f7f7f7;
+            background: #87ceeb; /* Sky blue color */
             margin: 0;
             height: 100vh;
             padding: 20px;
-            animation: fadeIn 1s ease-out;
+            overflow: hidden;
         }
-    
+
+        /* SVG Cloud Animation */
+        .clouds-svg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 200%;
+            height: 100%;
+            animation: moveClouds 60s linear infinite; /* Slow, smooth animation */
+            z-index: -1;
+        }
+
+        @keyframes moveClouds {
+            from {
+                transform: translateX(0);
+            }
+            to {
+                transform: translateX(-50%);
+            }
+        }
+
         .container {
             max-width: 500px;
             width: 100%;
@@ -26,30 +45,26 @@
             border-radius: 10px;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
             text-align: center;
-            animation: slideIn 0.5s ease-out;
         }
-    
+
         h1 {
             font-size: 2rem;
             color: #333;
             margin-bottom: 20px;
-            animation: fadeInText 1s ease-out;
         }
-    
+
         .form-group {
             margin: 15px 0;
             text-align: left;
-            opacity: 0;
-            animation: fadeInForm 1s ease-out forwards;
         }
-    
+
         label {
             display: block;
             font-weight: bold;
             margin-bottom: 5px;
             color: #555;
         }
-    
+
         input[type="text"], input[type="tel"], input[type="email"] {
             width: 100%;
             padding: 12px;
@@ -59,13 +74,13 @@
             box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
             transition: border-color 0.3s, box-shadow 0.3s;
         }
-    
+
         input[type="text"]:focus, input[type="tel"]:focus, input[type="email"]:focus {
             border-color: #007bff;
             outline: none;
             box-shadow: 0 0 8px rgba(0, 123, 255, 0.3);
         }
-    
+
         .button {
             width: 100%;
             padding: 12px;
@@ -77,97 +92,79 @@
             cursor: pointer;
             margin-top: 20px;
             transition: background-color 0.3s, transform 0.2s;
-            animation: fadeInButton 1s ease-out;
         }
-    
+
         .button:hover {
             background-color: #0056b3;
             transform: translateY(-2px);
         }
-    
+
         .back-button {
             background-color: #6c757d;
             margin-top: 10px;
-            transition: background-color 0.3s, transform 0.2s;
         }
-    
+
         .back-button:hover {
             background-color: #5a6268;
-            transform: translateY(-2px);
-        }
-    
-        .error {
-            color: #d9534f;
-            font-size: 0.9rem;
-            margin-top: 8px;
-            display: none;
-        }
-    
-        /* Media Queries */
-        @media (max-width: 480px) {
-            .container {
-                padding: 20px;
-            }
-    
-            h1 {
-                font-size: 1.8rem;
-            }
-        }
-    
-        /* Keyframe Animations */
-        @keyframes fadeIn {
-            0% {
-                opacity: 0;
-            }
-            100% {
-                opacity: 1;
-            }
-        }
-    
-        @keyframes slideIn {
-            0% {
-                transform: translateY(-30px);
-                opacity: 0;
-            }
-            100% {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-    
-        @keyframes fadeInText {
-            0% {
-                opacity: 0;
-            }
-            100% {
-                opacity: 1;
-            }
-        }
-    
-        @keyframes fadeInForm {
-            0% {
-                opacity: 0;
-            }
-            100% {
-                opacity: 1;
-            }
-        }
-    
-        @keyframes fadeInButton {
-            0% {
-                opacity: 0;
-            }
-            100% {
-                opacity: 1;
-            }
         }
     </style>
-    
 </head>
 <body>
+    <!-- SVG Clouds -->
+    <svg class="clouds-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3840 1080" preserveAspectRatio="xMinYMin slice">
+        <!-- Cloud Group 1 -->
+        <g fill="#ffffff" opacity="0.8">
+            <circle cx="200" cy="200" r="60"></circle>
+            <circle cx="260" cy="200" r="50"></circle>
+            <circle cx="230" cy="170" r="50"></circle>
+            <circle cx="190" cy="250" r="40"></circle>
+            <circle cx="270" cy="230" r="30"></circle>
+        </g>
+        <!-- Cloud Group 2 -->
+        <g fill="#ffffff" opacity="0.7">
+            <circle cx="800" cy="300" r="80"></circle>
+            <circle cx="870" cy="300" r="70"></circle>
+            <circle cx="840" cy="260" r="60"></circle>
+            <circle cx="820" cy="340" r="50"></circle>
+            <circle cx="880" cy="330" r="40"></circle>
+        </g>
+        <!-- Cloud Group 3 -->
+        <g fill="#ffffff" opacity="0.6">
+            <circle cx="1400" cy="150" r="70"></circle>
+            <circle cx="1470" cy="150" r="60"></circle>
+            <circle cx="1440" cy="120" r="50"></circle>
+            <circle cx="1420" cy="190" r="40"></circle>
+            <circle cx="1480" cy="170" r="30"></circle>
+        </g>
+        <!-- Cloud Group 4 -->
+        <g fill="#ffffff" opacity="0.8">
+            <circle cx="2000" cy="400" r="90"></circle>
+            <circle cx="2070" cy="400" r="80"></circle>
+            <circle cx="2040" cy="360" r="70"></circle>
+            <circle cx="2020" cy="440" r="60"></circle>
+            <circle cx="2080" cy="430" r="50"></circle>
+        </g>
+        <!-- Cloud Group 5 -->
+        <g fill="#ffffff" opacity="0.7">
+            <circle cx="2700" cy="250" r="80"></circle>
+            <circle cx="2770" cy="250" r="70"></circle>
+            <circle cx="2740" cy="220" r="60"></circle>
+            <circle cx="2720" cy="290" r="50"></circle>
+            <circle cx="2780" cy="270" r="40"></circle>
+        </g>
+        <!-- Cloud Group 6 -->
+        <g fill="#ffffff" opacity="0.6">
+            <circle cx="3400" cy="100" r="70"></circle>
+            <circle cx="3470" cy="100" r="60"></circle>
+            <circle cx="3440" cy="80" r="50"></circle>
+            <circle cx="3420" cy="140" r="40"></circle>
+            <circle cx="3480" cy="120" r="30"></circle>
+        </g>
+    </svg>
+
     <div class="container">
         <h1>Enter Customer Details</h1>
-        <form method="POST" action="{{ url_for('customer_details') }}" onsubmit="return validateForm()">
+        <form method="POST" action="{{ url_for('customer_details') }}">
             <div class="form-group">
                 <label for="name">Name:</label>
                 <input type="text" name="name" id="name" required>
@@ -175,7 +172,6 @@
             <div class="form-group">
                 <label for="phone">Phone Number:</label>
                 <input type="tel" name="phone" id="phone" required>
-                <div id="error-message" class="error">Please enter a valid 10-digit phone number.</div>
             </div>
             <div class="form-group">
                 <label for="email">Email:</label>
@@ -185,20 +181,5 @@
         </form>
         <button onclick="location.href='/'" class="button back-button">Back to Home</button>
     </div>
-    <script>
-        function validateForm() {
-            const phone = document.getElementById("phone").value;
-            const errorMessage = document.getElementById("error-message");
-            const phonePattern = /^[0-9]{10}$/;
-
-            if (!phonePattern.test(phone)) {
-                errorMessage.style.display = "block";
-                return false;
-            } else {
-                errorMessage.style.display = "none";
-                return true;
-            }
-        }
-    </script>
 </body>
 </html>

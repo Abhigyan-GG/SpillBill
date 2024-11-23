@@ -12,16 +12,20 @@
             margin: 0;
             padding: 0;
         }
+        
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f7f7f7;
+            background: linear-gradient(180deg, #e0f7fa, #80deea, #26c6da, #00bcd4, #00838f);
+            background-size: cover;
             display: flex;
             align-items: center;
             justify-content: center;
             min-height: 100vh;
             margin: 0;
             padding: 20px;
+            overflow: hidden; /* Prevent scrolling for a better visual effect */
         }
+        
         .container {
             width: 100%;
             max-width: 900px;
@@ -30,12 +34,17 @@
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
             padding: 30px;
             text-align: center;
+            position: relative;
+            z-index: 1;
         }
+        
         h1 {
             font-size: 2.2rem;
             color: #333;
             margin-bottom: 20px;
+            font-weight: bold;
         }
+        
         table {
             width: 100%;
             margin: 20px 0;
@@ -44,52 +53,67 @@
             border-radius: 10px;
             overflow: hidden;
         }
+        
         table th, table td {
             padding: 15px;
             text-align: center;
         }
+        
         table th {
             background-color: #007bff;
             color: #ffffff;
             font-weight: 600;
         }
+        
         table td {
             background-color: #f9f9f9;
             color: #555;
         }
+        
         table tr:nth-child(even) td {
             background-color: #f1f1f1;
         }
+        
         .button {
-            padding: 10px 20px;
+            padding: 12px 24px;
             color: white;
             background-color: #007bff;
             border: none;
-            border-radius: 5px;
+            border-radius: 6px;
             text-decoration: none;
             cursor: pointer;
             font-weight: bold;
-            transition: background-color 0.3s, transform 0.2s;
+            transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s;
             box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+            display: inline-block;
         }
+        
         .button:hover {
             background-color: #0056b3;
-            transform: translateY(-2px);
+            transform: translateY(-4px);
             box-shadow: 0 6px 12px rgba(0, 123, 255, 0.4);
         }
-        .button-container {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-top: 20px;
+        
+        .button:active {
+            transform: translateY(0);
         }
+        
         .actions-button {
-            padding: 8px 16px;
+            padding: 10px 20px;
             background-color: #dc3545;
         }
+        
         .actions-button:hover {
             background-color: #c82333;
         }
+        
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
         @media (max-width: 768px) {
             table {
                 font-size: 0.9rem;
@@ -102,9 +126,36 @@
                 font-size: 0.9rem;
             }
         }
+        
+        .wave {
+            position: absolute;
+            width: 200%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 0;
+            opacity: 0.7;
+        }
+        
+        .wave path {
+            animation: moveWaves 30s infinite linear;
+        }
+        
+        @keyframes moveWaves {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
     </style>
 </head>
 <body>
+    <svg class="wave" viewBox="0 0 1440 320">
+        <path fill="#e0f7fa" fill-opacity="1" d="M0,128L80,160C160,192,320,256,480,250.7C640,245,800,171,960,149.3C1120,128,1280,160,1360,176L1440,192L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z"></path>
+        <path fill="#80deea" fill-opacity="1" d="M0,160L80,197.3C160,235,320,309,480,293.3C640,277,800,171,960,149.3C1120,128,1280,192,1360,224L1440,256L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z"></path>
+        <path fill="#26c6da" fill-opacity="1" d="M0,192L80,213.3C160,235,320,277,480,256C640,235,800,149,960,112C1120,75,1280,117,1360,138.7L1440,160L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z"></path>
+        <path fill="#00bcd4" fill-opacity="1" d="M0,224L80,256C160,288,320,352,480,330.7C640,309,800,235,960,186.7C1120,139,1280,149,1360,160L1440,171.3L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z"></path>
+        <path fill="#00838f" fill-opacity="1" d="M0,288L80,293.3C160,299,320,309,480,298.7C640,288,800,256,960,224C1120,192,1280,160,1360,144L1440,128L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z"></path>
+    </svg>
+    
     <div class="container">
         <h1>Product Inventory</h1>
         <table>

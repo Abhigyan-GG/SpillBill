@@ -54,7 +54,7 @@
             border: 1px solid #ccc;
             font-size: 1rem;
             width: 100%;
-            transition: border-color 0.3s;
+            transition: border-color 0.3s, box-shadow 0.3s;
         }
         input[type="text"]:focus,
         input[type="number"]:focus {
@@ -62,32 +62,58 @@
             border-color: #007bff;
             box-shadow: 0 0 8px rgba(0, 123, 255, 0.3);
         }
-        button {
+        
+        /* Submit Button - Blue */
+        .submit-button {
+            background-color: #007bff;
+            color: white;
+            padding: 14px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 123, 255, 0.2);
+        }
+
+        .submit-button:hover {
+            background-color: #0056b3;
+            transform: translateY(-4px); /* Slight lift */
+            box-shadow: 0 6px 15px rgba(0, 123, 255, 0.3); /* Stronger shadow on hover */
+        }
+
+        .submit-button:active {
+            transform: translateY(2px); /* Button presses down */
+            box-shadow: 0 2px 5px rgba(0, 123, 255, 0.2); /* Softer shadow on click */
+        }
+
+        /* Back Button - Gray */
+        .back-button {
+            background-color: #6c757d;
+            color: white;
             padding: 12px;
             font-size: 1rem;
             font-weight: 600;
             border: none;
-            border-radius: 8px;
+            border-radius: 10px;
             cursor: pointer;
-            transition: background-color 0.3s, transform 0.2s;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(108, 117, 125, 0.2);
         }
-        .submit-button {
-            background-color: #007bff;
-            color: #ffffff;
-        }
-        .submit-button:hover {
-            background-color: #0056b3;
-            transform: translateY(-2px);
-        }
-        .back-button {
-            background-color: #6c757d;
-            color: #ffffff;
-            margin-top: 10px;
-        }
+
         .back-button:hover {
             background-color: #5a6268;
-            transform: translateY(-2px);
+            transform: translateY(-4px); /* Lift effect */
+            box-shadow: 0 6px 15px rgba(108, 117, 125, 0.3); /* Stronger shadow on hover */
         }
+
+        .back-button:active {
+            transform: translateY(2px); /* Button presses down */
+            box-shadow: 0 2px 5px rgba(108, 117, 125, 0.2); /* Softer shadow on active */
+        }
+
         /* Responsive adjustments */
         @media (max-width: 600px) {
             h1 {
