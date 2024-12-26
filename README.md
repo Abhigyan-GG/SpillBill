@@ -76,6 +76,3 @@ SpillBILL is a QR-code-based shopping mall billing system that allows customers 
 
 - Thanks to the contributors for their help in developing and enhancing SpillBILL.
 - Special thanks to the open-source libraries used in the project for QR code generation, Flask, and database management.
-```
-
-This format includes typical sections for a GitHub README, such as installation instructions, project features, contributors, and license details. Let me know if you'd like to add or change anything!
