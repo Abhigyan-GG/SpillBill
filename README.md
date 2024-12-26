@@ -1,5 +1,3 @@
-Here's a GitHub-style README for your SpillBILL project:
-
 # SpillBILL
 
 SpillBILL is a QR-code-based shopping mall billing system that allows customers to easily checkout by scanning product QR codes. It includes features for product inventory management, bill generation, and customer checkout. Admins can manage the product inventory, while customers can scan QR codes, generate bills, and receive email receipts.
