@@ -66,9 +66,9 @@ SpillBILL is a QR-code-based shopping mall billing system that allows customers 
 ## Contributors
 
 - **Abhigyan GG** - Main Developer
+- **Vabhravi** - Design Head
 - **Saivats** - Contributor
 - **Rohit** - Contributor
-- **Vabhravi** - Contributor
 - **Daksh** - Contributor
 
 
