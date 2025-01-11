@@ -8,8 +8,8 @@
     <style>
         body {
             font-family: 'Roboto', sans-serif;
-            background: #000; /* Black background */
-            color: #fff;
+            background: linear-gradient(to bottom, #121212, #1c1c1c);
+            color: #ffffff;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -21,35 +21,38 @@
         }
 
         .container {
-            background: rgba(0, 0, 0, 0.8); /* Semi-transparent black */
+            background: rgba(30, 30, 30, 0.8); /* Adjusted transparency */
             padding: 40px 20px;
             border-radius: 12px;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
             max-width: 600px;
             width: 100%;
-            margin-top: 10%; 
+            z-index: 10; /* Above waves */
+            margin-top: 10%; /* Adjust position to keep it above waves */
+            position: relative;
+            overflow: hidden;
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
         }
 
         img.icon {
-            width: 60px;
-            margin-bottom: 15px;
+            width: 100px; /* Increased size */
+            margin: 0 auto 15px; /* Centered and added spacing */
+            display: block;
         }
 
         h1 {
             font-size: 48px;
             margin: 20px 0;
-            text-transform: uppercase;
-            background: linear-gradient(to right, #00c6ff, #0072ff, #1f1f1f); /* Intense gradient */
-            background-clip: text;
-            -webkit-background-clip: text;
-            color: transparent; /* Makes gradient text visible */
+            color: #ffffff;
             font-weight: bold;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8); /* 3D effect */
+            text-shadow: 4px 4px 6px rgba(0, 0, 0, 0.3); /* Subtle shadow for depth */
         }
+
 
         p {
             font-size: 18px;
-            color: #b0bec5; /* Light grey for description text */
+            color: #aaaaaa;
             margin-bottom: 20px;
         }
 
@@ -60,25 +63,27 @@
         }
 
         .button {
-            background: linear-gradient(to right, #0072ff, #00c6ff); /* Gradient blue buttons */
+            background-color: #00B4D8;
             color: white;
             padding: 12px 20px;
             font-size: 18px;
             border-radius: 6px;
             text-decoration: none;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
             transition: all 0.3s;
         }
 
         .button:hover {
-            background: linear-gradient(to right, #00c6ff, #0072ff); /* Reverse gradient on hover */
+            background-color: #1D3557;
             transform: translateY(-3px);
         }
 
         .footer {
-            margin-top: 20px;
-            color: #b0bec5; /* Light grey text for the footer */
+            position: absolute;
+            bottom: 10px;
+            color: #aaaaaa;
             font-size: 14px;
+            z-index: 10; /* Above waves */
         }
 
         /* Waves Animation */
@@ -86,13 +91,13 @@
             position: fixed;
             bottom: 0;
             left: 0;
-            width: 200%;
-            height: 75vh;
+            width: 200%; /* Twice the width for smooth animation */
+            height: 75vh; /* Covers 75% of the viewport height */
             z-index: 1; /* Behind the content */
-            animation: waveFlow 30s linear infinite; /* Smooth animation */
+            animation: waveFlow 30s linear infinite; /* Slower animation */
         }
 
-        /* Keyframes for smoother wave animation */
+        /* Keyframe for smoother wave animation */
         @keyframes waveFlow {
             0% {
                 transform: translateX(0);
@@ -102,43 +107,45 @@
             }
         }
 
-        /* Wave styles */
+        /* Additional wave layers for more depth */
         .wave1 {
-            fill: #0072ff;
-            fill-opacity: 0.7;
-        }
-
-        .wave2 {
-            fill: #0056b3;
+            fill: #1a237e;
             fill-opacity: 0.6;
         }
 
-        .wave3 {
-            fill: #004494;
+        .wave2 {
+            fill: #283593;
             fill-opacity: 0.5;
         }
 
-        .wave4 {
-            fill: #003370;
+        .wave3 {
+            fill: #3f51b5;
             fill-opacity: 0.4;
         }
 
+        .wave4 {
+            fill: #5c6bc0;
+            fill-opacity: 0.3;
+        }
+
+        /* Soft gradient effect above the waves */
         .wave-overlay {
             position: absolute;
-            top: -50px;
+            top: -50px; /* Positioned above the waves */
             left: 0;
             width: 100%;
             height: 50px;
-            background: linear-gradient(to top, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.8) 100%);
-            z-index: 5;
+            background: linear-gradient(to top, rgba(18, 18, 18, 0) 0%, rgba(18, 18, 18, 0.8) 100%);
+            z-index: 5; /* Below the content */
         }
+
     </style>
 </head>
 <body>
 
     <div class="container">
         <img src="{{ url_for('static', filename='favicon.png') }}" alt="SpillBILL Logo" class="icon">
-        <h1>SpillBILL</h1>
+        <h1>Welcome to SpillBILL</h1>
         <p>Your ultimate billing and inventory management solution.</p>
         <div class="button-container">
             <a href="{{ url_for('admin_login') }}" class="button">Admin Login</a>
@@ -150,7 +157,7 @@
         &copy; 2024 SpillBILL. All rights reserved.
     </div>
 
-    <!-- Gradient overlay for waves -->
+    <!-- Soft gradient overlay above waves -->
     <div class="wave-overlay"></div>
 
     <!-- Waves SVG -->
@@ -158,7 +165,7 @@
         <path class="wave1" d="M0,160L30,176C60,192,120,224,180,218.7C240,213,300,171,360,176C420,181,480,235,540,234.7C600,235,660,181,720,154.7C780,128,840,128,900,138.7C960,149,1020,171,1080,197.3C1140,224,1200,256,1260,272C1320,288,1380,288,1410,288L1440,288L1440,320L1410,320C1380,320,1320,320,1260,320C1200,320,1140,320,1080,320C1020,320,960,320,900,320C840,320,780,320,720,320C660,320,600,320,540,320C480,320,420,320,360,320C300,320,240,320,180,320C120,320,60,320,30,320L0,320Z"></path>
         <path class="wave2" d="M0,192L40,218.7C80,245,160,299,240,282.7C320,267,400,181,480,154.7C560,128,640,160,720,186.7C800,213,880,235,960,234.7C1040,235,1120,213,1200,202.7C1280,192,1360,192,1400,192L1440,192L1440,320L1400,320C1360,320,1280,320,1200,320C1120,320,1040,320,960,320C880,320,800,320,720,320C640,320,560,320,480,320C400,320,320,320,240,320C160,320,80,320,40,320L0,320Z"></path>
         <path class="wave3" d="M0,128L40,133.3C80,139,160,149,240,138.7C320,128,400,96,480,80C560,64,640,64,720,74.7C800,85,880,107,960,117.3C1040,128,1120,128,1200,128C1280,128,1360,128,1400,128L1440,128L1440,320L1400,320C1360,320,1280,320,1200,320C1120,320,1040,320,960,320C880,320,800,320,720,320C640,320,560,320,480,320C400,320,320,320,240,320C160,320,80,320,40,320L0,320Z"></path>
-        <path class="wave4" d="M0,64L40,74.7C80,85,160,107,240,122.7C320,139,400,149,480,138.7C560,128,640,107,720,122.7C800,139,880,181,960,186.7C1040,192,1120,171,1200,154.7C1280,139,1360,128,1400,122.7L1440,117.3L1440,320L1400,320C1360,320,1280,320,1200,320C1120,320,1040,320,960,320C880,320,800,320,720,320C640,320,560,320,480,320C400,320,320,320,240,320C160,320,80,320,40,320L0,320Z"></path>
+        <path class="wave4" d="M0,64L40,74.7C80,85,160,107,240,122.7C320,139,400,149,480,138.7C560,128,640,96,720,101.3C800,107,880,149,960,154.7C1040,160,1120,128,1200,122.7C1280,117,1360,139,1400,154.7L1440,170L1440,320L1400,320C1360,320,1280,320,1200,320C1120,320,1040,320,960,320C880,320,800,320,720,320C640,320,560,320,480,320C400,320,320,320,240,320C160,320,80,320,40,320L0,320Z"></path>
     </svg>
 
 </body>

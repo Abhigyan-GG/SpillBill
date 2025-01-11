@@ -18,23 +18,25 @@
             align-items: center;
             justify-content: center;
             min-height: 100vh;
-            background: linear-gradient(135deg, #e8f0fe, #d0e4fe);
+            background: linear-gradient(135deg, #121212, #1c1c1c); /* Dark Gray to Lighter Gray */
+            color: #ffffff; /* White Text */
             padding: 20px;
         }
         .container {
-            background-color: #ffffff;
+            background-color: #1c1c1c; /* Lighter Gray for the container */
             padding: 40px 30px;
             border-radius: 12px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
             max-width: 450px;
             width: 100%;
             text-align: center;
         }
         h1 {
-            color: #007bff;
-            font-size: 2rem;
+            color: #00B4D8; /* Light Blue for heading */
+            font-size: 2.5rem;
             margin-bottom: 25px;
             font-weight: 600;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3), 0px 0px 25px rgba(0, 180, 216, 0.5); /* 3D effect */
         }
         form {
             display: flex;
@@ -43,7 +45,7 @@
         }
         label {
             font-size: 1.1rem;
-            color: #555;
+            color: #aaaaaa; /* Light Gray for label text */
             font-weight: 500;
             text-align: left;
         }
@@ -51,21 +53,23 @@
         input[type="number"] {
             padding: 12px;
             border-radius: 8px;
-            border: 1px solid #ccc;
+            border: 1px solid #7f8c8d;
             font-size: 1rem;
             width: 100%;
             transition: border-color 0.3s, box-shadow 0.3s;
+            background-color: #ffffff; /* White background for inputs */
+            color: #121212; /* Dark text for readability */
         }
         input[type="text"]:focus,
         input[type="number"]:focus {
             outline: none;
-            border-color: #007bff;
-            box-shadow: 0 0 8px rgba(0, 123, 255, 0.3);
+            border-color: #00B4D8; /* Light Blue */
+            box-shadow: 0 0 8px rgba(0, 180, 216, 0.3);
         }
-        
-        /* Submit Button - Blue */
+
+        /* Submit Button - Light Blue */
         .submit-button {
-            background-color: #007bff;
+            background-color: #00B4D8; /* Light Blue */
             color: white;
             padding: 14px;
             font-size: 1.1rem;
@@ -74,23 +78,23 @@
             border-radius: 10px;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 10px rgba(0, 123, 255, 0.2);
+            box-shadow: 0 4px 10px rgba(0, 180, 216, 0.2);
         }
 
         .submit-button:hover {
-            background-color: #0056b3;
+            background-color: #1D3557; /* Dark Blue */
             transform: translateY(-4px); /* Slight lift */
-            box-shadow: 0 6px 15px rgba(0, 123, 255, 0.3); /* Stronger shadow on hover */
+            box-shadow: 0 6px 15px rgba(0, 180, 216, 0.3); /* Stronger shadow on hover */
         }
 
         .submit-button:active {
             transform: translateY(2px); /* Button presses down */
-            box-shadow: 0 2px 5px rgba(0, 123, 255, 0.2); /* Softer shadow on click */
+            box-shadow: 0 2px 5px rgba(0, 180, 216, 0.2); /* Softer shadow on click */
         }
 
         /* Back Button - Gray */
         .back-button {
-            background-color: #6c757d;
+            background-color: #7f8c8d; /* Light Gray */
             color: white;
             padding: 12px;
             font-size: 1rem;
@@ -104,7 +108,7 @@
         }
 
         .back-button:hover {
-            background-color: #5a6268;
+            background-color: #95a5a6; /* Darker Gray */
             transform: translateY(-4px); /* Lift effect */
             box-shadow: 0 6px 15px rgba(108, 117, 125, 0.3); /* Stronger shadow on hover */
         }
