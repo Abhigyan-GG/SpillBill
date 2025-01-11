@@ -8,8 +8,8 @@
     <style>
         body {
             font-family: 'Roboto', sans-serif;
-            background: linear-gradient(to bottom, #e6f3ff, #ffffff);
-            color: #002f66;
+            background: #000; /* Black background */
+            color: #fff;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -21,19 +21,13 @@
         }
 
         .container {
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(0, 0, 0, 0.8); /* Semi-transparent black */
             padding: 40px 20px;
             border-radius: 12px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
             max-width: 600px;
             width: 100%;
-            z-index: 10; /* Above waves */
-            margin-top: 10%; /* Adjust position to keep it above waves */
-            position: relative;
-            overflow: hidden;
-            border-bottom-left-radius: 0;
-            border-bottom-right-radius: 0;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            margin-top: 10%; 
         }
 
         img.icon {
@@ -42,14 +36,20 @@
         }
 
         h1 {
-            font-size: 36px;
+            font-size: 48px;
             margin: 20px 0;
-            color: #333;
+            text-transform: uppercase;
+            background: linear-gradient(to right, #00c6ff, #0072ff, #1f1f1f); /* Intense gradient */
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent; /* Makes gradient text visible */
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8); /* 3D effect */
         }
 
         p {
             font-size: 18px;
-            color: #555;
+            color: #b0bec5; /* Light grey for description text */
             margin-bottom: 20px;
         }
 
@@ -60,27 +60,25 @@
         }
 
         .button {
-            background-color: #00B4D8;
+            background: linear-gradient(to right, #0072ff, #00c6ff); /* Gradient blue buttons */
             color: white;
             padding: 12px 20px;
             font-size: 18px;
             border-radius: 6px;
             text-decoration: none;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
             transition: all 0.3s;
         }
 
         .button:hover {
-            background-color: #1D3557;
+            background: linear-gradient(to right, #00c6ff, #0072ff); /* Reverse gradient on hover */
             transform: translateY(-3px);
         }
 
         .footer {
-            position: absolute;
-            bottom: 10px;
-            color: #777;
+            margin-top: 20px;
+            color: #b0bec5; /* Light grey text for the footer */
             font-size: 14px;
-            z-index: 10; /* Above waves */
         }
 
         /* Waves Animation */
@@ -88,13 +86,13 @@
             position: fixed;
             bottom: 0;
             left: 0;
-            width: 200%; /* Twice the width for smooth animation */
-            height: 75vh; /* Covers 75% of the viewport height */
+            width: 200%;
+            height: 75vh;
             z-index: 1; /* Behind the content */
-            animation: waveFlow 30s linear infinite; /* Slower animation */
+            animation: waveFlow 30s linear infinite; /* Smooth animation */
         }
 
-        /* Keyframe for smoother wave animation */
+        /* Keyframes for smoother wave animation */
         @keyframes waveFlow {
             0% {
                 transform: translateX(0);
@@ -104,45 +102,43 @@
             }
         }
 
-        /* Additional wave layers for more depth */
+        /* Wave styles */
         .wave1 {
-            fill: #4f9fcf;
+            fill: #0072ff;
             fill-opacity: 0.7;
         }
 
         .wave2 {
-            fill: #4C84B1;
+            fill: #0056b3;
             fill-opacity: 0.6;
         }
 
         .wave3 {
-            fill: #79A9C9;
+            fill: #004494;
             fill-opacity: 0.5;
         }
 
         .wave4 {
-            fill: #93C4D9;
+            fill: #003370;
             fill-opacity: 0.4;
         }
 
-        /* Soft gradient effect above the waves */
         .wave-overlay {
             position: absolute;
-            top: -50px; /* Positioned above the waves */
+            top: -50px;
             left: 0;
             width: 100%;
             height: 50px;
-            background: linear-gradient(to top, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%);
-            z-index: 5; /* Below the content */
+            background: linear-gradient(to top, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.8) 100%);
+            z-index: 5;
         }
-
     </style>
 </head>
 <body>
 
     <div class="container">
         <img src="{{ url_for('static', filename='favicon.png') }}" alt="SpillBILL Logo" class="icon">
-        <h1>Welcome to SpillBill</h1>
+        <h1>SpillBILL</h1>
         <p>Your ultimate billing and inventory management solution.</p>
         <div class="button-container">
             <a href="{{ url_for('admin_login') }}" class="button">Admin Login</a>
@@ -154,7 +150,7 @@
         &copy; 2024 SpillBILL. All rights reserved.
     </div>
 
-    <!-- Soft gradient overlay above waves -->
+    <!-- Gradient overlay for waves -->
     <div class="wave-overlay"></div>
 
     <!-- Waves SVG -->
