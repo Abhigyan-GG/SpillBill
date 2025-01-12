@@ -232,7 +232,7 @@ def generate_bill():
         msg['To'] = useremail
         msg['Subject'] = f'SpillBILL - Your Bill {timestamp}'
         msg.attach(MIMEText(
-            f"Dear {user_name},\n\nWe are pleased to provide you with your monthly e-bill for your recent transactions with {user_name}. Please find the attached document for detailed billing information."
+            f"Dear {user_name},\n\nWe are pleased to provide you with your e-bill for your recent transactions with XYZ Store. Please find the attached document for detailed billing information."
             f"\n\nKindly review the e-bill at your earliest convenience. If you have any questions or require further assistance, our customer support team is available to help. \n\nWe value your business and appreciate your prompt attention to this matter. Thank you for choosing SpillBill.",
             'plain'))
         with open(pdf_filename, "rb") as pdf:
