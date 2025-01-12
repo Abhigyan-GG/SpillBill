@@ -14,36 +14,56 @@
         }
         
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(180deg, #e0f7fa, #80deea, #26c6da, #00bcd4, #00838f);
-            background-size: cover;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            margin: 0;
-            padding: 20px;
-            overflow: hidden; /* Prevent scrolling for a better visual effect */
-        }
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(135deg, #121212, #1c1c1c); /* Dark gradient background */
+    color: rgba(255, 255, 255, 0.9); /* Slightly translucent white text */
+    min-height: 100vh; /* Make sure the body fills the viewport */
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+}
+
+.container {
+    background: rgba(30, 30, 30, 0.9); /* Slightly darker and less transparent */
+    padding: 40px 20px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+    max-width: 600px;
+    width: 100%;
+    z-index: 10; /* Keep above waves */
+    position: relative; /* Positioned naturally for scrolling */
+    overflow: auto; /* Allow scrolling within the container */
+    max-height: 80vh; /* Restrict height to enable internal scrolling */
+    margin: auto; /* Align in the center naturally */
+    color: rgba(255, 255, 255, 0.95); /* Bright text for better readability */
+}
+
+/* Optional: Add scroll behavior for smooth interaction */
+.container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.container::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 4px;
+}
+
+.container::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.8);
+}
+
         
-        .container {
-            width: 100%;
-            max-width: 900px;
-            background-color: #ffffff;
-            border-radius: 10px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-            padding: 30px;
+.header h1 {
             text-align: center;
-            position: relative;
-            z-index: 1;
-        }
-        
-        h1 {
-            font-size: 2.2rem;
-            color: #333;
-            margin-bottom: 20px;
+            font-size: 48px;
+
+            margin: 20px 0;
             font-weight: bold;
+            text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.8);
         }
+
         
         table {
             width: 100%;
@@ -127,33 +147,64 @@
             }
         }
         
-        .wave {
+        .wave-overlay {
             position: absolute;
-            width: 200%;
-            height: 100%;
-            top: 0;
+            top: -50px;
             left: 0;
-            z-index: 0;
-            opacity: 0.7;
+            width: 100%;
+            height: 50px;
+            background: linear-gradient(to top, rgba(18, 18, 18, 0) 0%, rgba(18, 18, 18, 0.8) 100%);
+            z-index: 5;
         }
-        
-        .wave path {
-            animation: moveWaves 30s infinite linear;
+
+        .waves {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 200%;
+            height: 75vh;
+            z-index: 1;
+            animation: waveFlow 30s linear infinite;
         }
-        
-        @keyframes moveWaves {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
+
+        @keyframes waveFlow {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        .wave1 {
+            fill: #1a237e;
+            fill-opacity: 0.6;
+        }
+
+        .wave2 {
+            fill: #283593;
+            fill-opacity: 0.5;
+        }
+
+        .wave3 {
+            fill: #3f51b5;
+            fill-opacity: 0.4;
+        }
+
+        .wave4 {
+            fill: #5c6bc0;
+            fill-opacity: 0.3;
         }
     </style>
 </head>
 <body>
-    <svg class="wave" viewBox="0 0 1440 320">
-        <path fill="#e0f7fa" fill-opacity="1" d="M0,128L80,160C160,192,320,256,480,250.7C640,245,800,171,960,149.3C1120,128,1280,160,1360,176L1440,192L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z"></path>
-        <path fill="#80deea" fill-opacity="1" d="M0,160L80,197.3C160,235,320,309,480,293.3C640,277,800,171,960,149.3C1120,128,1280,192,1360,224L1440,256L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z"></path>
-        <path fill="#26c6da" fill-opacity="1" d="M0,192L80,213.3C160,235,320,277,480,256C640,235,800,149,960,112C1120,75,1280,117,1360,138.7L1440,160L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z"></path>
-        <path fill="#00bcd4" fill-opacity="1" d="M0,224L80,256C160,288,320,352,480,330.7C640,309,800,235,960,186.7C1120,139,1280,149,1360,160L1440,171.3L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z"></path>
-        <path fill="#00838f" fill-opacity="1" d="M0,288L80,293.3C160,299,320,309,480,298.7C640,288,800,256,960,224C1120,192,1280,160,1360,144L1440,128L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z"></path>
+    <div class="wave-overlay"></div>
+    <!-- Waves SVG -->
+    <svg class="waves" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" preserveAspectRatio="none">
+        <path class="wave1" d="M0,160L30,176C60,192,120,224,180,218.7C240,213,300,171,360,176C420,181,480,235,540,234.7C600,235,660,181,720,154.7C780,128,840,128,900,138.7C960,149,1020,171,1080,197.3C1140,224,1200,256,1260,272C1320,288,1380,288,1410,288L1440,288L1440,320L1410,320C1380,320,1320,320,1260,320C1200,320,1140,320,1080,320C1020,320,960,320,900,320C840,320,780,320,720,320C660,320,600,320,540,320C480,320,420,320,360,320C300,320,240,320,180,320C120,320,60,320,30,320L0,320Z"></path>
+        <path class="wave2" d="M0,192L40,218.7C80,245,160,299,240,282.7C320,267,400,181,480,154.7C560,128,640,160,720,186.7C800,213,880,235,960,234.7C1040,235,1120,213,1200,202.7C1280,192,1360,192,1400,192L1440,192L1440,320L1400,320C1360,320,1280,320,1200,320C1120,320,1040,320,960,320C880,320,800,320,720,320C640,320,560,320,480,320C400,320,320,320,240,320C160,320,80,320,40,320L0,320Z"></path>
+        <path class="wave3" d="M0,128L40,133.3C80,139,160,149,240,138.7C320,128,400,96,480,80C560,64,640,64,720,74.7C800,85,880,107,960,117.3C1040,128,1120,128,1200,128C1280,128,1360,128,1400,128L1440,128L1440,320L1400,320C1360,320,1280,320,1200,320C1120,320,1040,320,960,320C880,320,800,320,720,320C640,320,560,320,480,320C400,320,320,320,240,320C160,320,80,320,40,320L0,320Z"></path>
+        <path class="wave4" d="M0,64L40,74.7C80,85,160,107,240,122.7C320,139,400,149,480,138.7C560,128,640,96,720,101.3C800,107,880,149,960,154.7C1040,160,1120,128,1200,122.7C1280,117,1360,139,1400,154.7L1440,170L1440,320L1400,320C1360,320,1280,320,1200,320C1120,320,1040,320,960,320C880,320,800,320,720,320C640,320,560,320,480,320C400,320,320,320,240,320C160,320,80,320,40,320L0,320Z"></path>
     </svg>
     
     <div class="container">

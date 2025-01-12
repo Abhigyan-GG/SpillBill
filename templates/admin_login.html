@@ -8,50 +8,34 @@
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(to bottom, 
-                #1E3A8A, /* Dark Blue */
-                #2563EB, /* Royal Blue */
-                #3B82F6, /* Sky Blue */
-                #60A5FA, /* Light Blue */
-                #93C5FD, /* Very Light Blue */
-                #D1D5DB  /* Light Grayish Blue */
-            );
-            background-size: 200% 200%;
-            animation: gradientFlow 30s linear infinite;
             margin: 0;
-            height: 100vh;
-            padding: 20px;
-        }
-
-        @keyframes gradientFlow {
-            0% {
-                background-position: 0% 0%;
-            }
-            50% {
-                background-position: 100% 100%;
-            }
-            100% {
-                background-position: 0% 0%;
-            }
+            padding: 0;
+            background: linear-gradient(135deg, #121212, #1c1c1c);
+            color: rgba(255, 255, 255, 0.9);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         .container {
-            max-width: 500px;
+            background: rgba(30, 30, 30, 0.9);
+            padding: 40px 20px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+            max-width: 600px;
             width: 100%;
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+            overflow: auto;
+            max-height: 80vh;
             text-align: center;
         }
 
-        h1 {
-            font-size: 2rem;
-            color: #333;
+        .container h1 {
             margin-bottom: 20px;
+            font-size: 2.5rem;
+            font-weight: bold;
+            text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.8);
         }
 
         .form-group {
@@ -63,16 +47,16 @@
             display: block;
             font-weight: bold;
             margin-bottom: 5px;
-            color: #555;
+            color: rgba(255, 255, 255, 0.8);
         }
 
         input[type="email"], input[type="text"] {
-            width: 100%;
+            align-items: center;
+            width: 90%;
             padding: 12px;
             font-size: 1rem;
             border: 1px solid #ddd;
             border-radius: 5px;
-            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
             transition: border-color 0.3s;
         }
 
@@ -81,9 +65,8 @@
             outline: none;
         }
 
-        /* Primary Button Styles */
         .button {
-            width: 100%;
+            width: 50%;
             padding: 14px;
             font-size: 1.1rem;
             color: white;
@@ -93,46 +76,21 @@
             cursor: pointer;
             margin-top: 20px;
             transition: all 0.3s ease-in-out;
-            box-shadow: 0 4px 10px rgba(0, 123, 255, 0.2); /* Subtle shadow */
+            box-shadow: 0 4px 10px rgba(0, 123, 255, 0.2);
         }
 
         .button:hover {
             background-color: #0056b3;
-            transform: translateY(-2px); /* Slight lift effect */
-            box-shadow: 0 6px 15px rgba(0, 123, 255, 0.3); /* Stronger shadow on hover */
+            transform: translateY(-2px);
         }
 
         .button:active {
-            transform: translateY(2px); /* Button appears pressed */
-            box-shadow: 0 2px 5px rgba(0, 123, 255, 0.2); /* Softer shadow on active */
+            transform: translateY(2px);
         }
 
-        /* Secondary Button Styles (Back button) */
         .back-button {
             background-color: #6c757d;
-            color: white;
             margin-top: 10px;
-            box-shadow: 0 4px 10px rgba(108, 117, 125, 0.2); /* Subtle shadow */
-            border-radius: 8px;
-            transition: all 0.3s ease-in-out;
-        }
-
-        .back-button:hover {
-            background-color: #5a6268;
-            transform: translateY(-2px); /* Lift effect */
-            box-shadow: 0 6px 15px rgba(108, 117, 125, 0.3); /* Stronger shadow on hover */
-        }
-
-        .back-button:active {
-            transform: translateY(2px); /* Button appears pressed */
-            box-shadow: 0 2px 5px rgba(108, 117, 125, 0.2); /* Softer shadow on active */
-        }
-
-        .error {
-            color: #d9534f;
-            font-size: 0.9rem;
-            margin-top: 8px;
-            display: none;
         }
 
         @media (max-width: 480px) {
@@ -140,9 +98,58 @@
                 padding: 20px;
             }
 
-            h1 {
+            .container h1 {
                 font-size: 1.8rem;
             }
+        }
+
+        .wave-overlay {
+            position: absolute;
+            top: -50px;
+            left: 0;
+            width: 100%;
+            height: 50px;
+            background: linear-gradient(to top, rgba(18, 18, 18, 0) 0%, rgba(18, 18, 18, 0.8) 100%);
+            z-index: 5;
+        }
+
+        .waves {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 200%;
+            height: 75vh;
+            z-index: 1;
+            animation: waveFlow 30s linear infinite;
+        }
+
+        @keyframes waveFlow {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        .wave1 {
+            fill: #1a237e;
+            fill-opacity: 0.6;
+        }
+
+        .wave2 {
+            fill: #283593;
+            fill-opacity: 0.5;
+        }
+
+        .wave3 {
+            fill: #3f51b5;
+            fill-opacity: 0.4;
+        }
+
+        .wave4 {
+            fill: #5c6bc0;
+            fill-opacity: 0.3;
         }
     </style>
 </head>
@@ -164,7 +171,6 @@
                 <div class="form-group">
                     <label for="email">Email Address:</label>
                     <input type="email" name="email" id="adminemail" required placeholder="Enter your email">
-                    <div id="email-error" class="error">Please enter a valid email address.</div>
                 </div>
                 <button type="submit" class="button">Send OTP</button>
             </form>
@@ -180,5 +186,13 @@
         
         <button onclick="location.href='/'" class="button back-button">Back to Home</button>
     </div>
+    <div class="wave-overlay"></div>
+    <!-- Waves SVG -->
+    <svg class="waves" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" preserveAspectRatio="none">
+        <path class="wave1" d="M0,160L30,176C60,192,120,224,180,218.7C240,213,300,171,360,176C420,181,480,235,540,234.7C600,235,660,181,720,154.7C780,128,840,128,900,138.7C960,149,1020,171,1080,197.3C1140,224,1200,256,1260,272C1320,288,1380,288,1410,288L1440,288L1440,320L1410,320C1380,320,1320,320,1260,320C1200,320,1140,320,1080,320C1020,320,960,320,900,320C840,320,780,320,720,320C660,320,600,320,540,320C480,320,420,320,360,320C300,320,240,320,180,320C120,320,60,320,30,320L0,320Z"></path>
+        <path class="wave2" d="M0,192L40,218.7C80,245,160,299,240,282.7C320,267,400,181,480,154.7C560,128,640,160,720,186.7C800,213,880,235,960,234.7C1040,235,1120,213,1200,202.7C1280,192,1360,192,1400,192L1440,192L1440,320L1400,320C1360,320,1280,320,1200,320C1120,320,1040,320,960,320C880,320,800,320,720,320C640,320,560,320,480,320C400,320,320,320,240,320C160,320,80,320,40,320L0,320Z"></path>
+        <path class="wave3" d="M0,128L40,133.3C80,139,160,149,240,138.7C320,128,400,96,480,80C560,64,640,64,720,74.7C800,85,880,107,960,117.3C1040,128,1120,128,1200,128C1280,128,1360,128,1400,128L1440,128L1440,320L1400,320C1360,320,1280,320,1200,320C1120,320,1040,320,960,320C880,320,800,320,720,320C640,320,560,320,480,320C400,320,320,320,240,320C160,320,80,320,40,320L0,320Z"></path>
+        <path class="wave4" d="M0,64L40,74.7C80,85,160,107,240,122.7C320,139,400,149,480,138.7C560,128,640,96,720,101.3C800,107,880,149,960,154.7C1040,160,1120,128,1200,122.7C1280,117,1360,139,1400,154.7L1440,170L1440,320L1400,320C1360,320,1280,320,1200,320C1120,320,1040,320,960,320C880,320,800,320,720,320C640,320,560,320,480,320C400,320,320,320,240,320C160,320,80,320,40,320L0,320Z"></path>
+    </svg>
 </body>
 </html>
